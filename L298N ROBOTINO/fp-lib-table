@@ -1,0 +1,4 @@
+(fp_lib_table
+	(version 7)
+	(lib (name "L298N ROBOTINO") (type "KiCad") (uri "C:/Users/PotatoLap/Code/Robotino/L298N ROBOTINO") (options "") (descr ""))
+)
