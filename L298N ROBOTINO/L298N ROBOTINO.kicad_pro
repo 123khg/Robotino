@@ -467,6 +467,7 @@
       "wire_dangling": "error"
     }
   },
+  "legacy": [],
   "libraries": {
     "pinned_footprint_libs": [],
     "pinned_symbol_libs": []
@@ -606,14 +607,14 @@
       "intersheets_ref_show": false,
       "intersheets_ref_suffix": "",
       "junction_size_choice": 3,
-      "label_size_ratio": 0.375,
+      "label_size_ratio": 0.25,
       "operating_point_overlay_i_precision": 3,
       "operating_point_overlay_i_range": "~A",
       "operating_point_overlay_v_precision": 3,
       "operating_point_overlay_v_range": "~V",
       "overbar_offset_ratio": 1.23,
-      "pin_symbol_size": 25.0,
-      "text_offset_ratio": 0.15
+      "pin_symbol_size": 0.0,
+      "text_offset_ratio": 0.08
     },
     "legacy_lib_dir": "",
     "legacy_lib_list": [],
@@ -628,17 +629,17 @@
     "top_level_sheets": [
       {
         "filename": "L298N ROBOTINO.kicad_sch",
-        "name": "Root",
+        "name": "L298N ROBOTINO",
         "uuid": "0a7d72ae-1f92-4131-9649-57d8864723d5"
       }
     ],
-    "used_designators": "",
+    "used_designators": "MotorA_F1-2,MotorB_F1-2",
     "variants": []
   },
   "sheets": [
     [
       "0a7d72ae-1f92-4131-9649-57d8864723d5",
-      "Root"
+      "L298N ROBOTINO"
     ]
   ],
   "text_variables": {},
