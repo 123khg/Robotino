@@ -160,185 +160,21 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Joystick PS2:Joystick_PS2"
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "JOYSTICK"
-				(at 18.542 10.922 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 0.635 0.635)
-					)
-				)
-			)
-			(property "Value" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "Joystick_PS2_1_1"
-				(rectangle
-					(start 13.97 16.51)
-					(end 22.86 6.35)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type color)
-						(color 252 255 153 1)
-					)
-				)
-				(pin power_in line
-					(at 19.05 19.05 270)
-					(length 2.54)
-					(name "VCC"
-						(effects
-							(font
-								(size 0.508 0.508)
-							)
-						)
-					)
-					(number ""
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_out line
-					(at 19.05 3.81 90)
-					(length 2.54)
-					(name "GND"
-						(effects
-							(font
-								(size 0.508 0.508)
-							)
-						)
-					)
-					(number ""
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin output line
-					(at 25.4 15.24 180)
-					(length 2.54)
-					(name "SW"
-						(effects
-							(font
-								(size 0.508 0.508)
-							)
-						)
-					)
-					(number ""
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin output line
-					(at 25.4 11.43 180)
-					(length 2.54)
-					(name "VRY"
-						(effects
-							(font
-								(size 0.508 0.508)
-							)
-						)
-					)
-					(number ""
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin output line
-					(at 25.4 7.62 180)
-					(length 2.54)
-					(name "VRX"
-						(effects
-							(font
-								(size 0.508 0.508)
-							)
-						)
-					)
-					(number ""
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "Joystick_PS2_1"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
 			(in_pos_files yes)
 			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "JOYSTICK"
-				(at 18.542 10.922 0)
+			(property "Reference" "JOYSTICK2"
+				(at 20.32 11.43 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
 					(font
 						(size 0.635 0.635)
 					)
+					(justify right)
 				)
 			)
 			(property "Value" ""
@@ -351,7 +187,7 @@
 					)
 				)
 			)
-			(property "Footprint" ""
+			(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Horizontal"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -397,42 +233,6 @@
 						(color 252 255 153 1)
 					)
 				)
-				(pin power_in line
-					(at 19.05 19.05 270)
-					(length 2.54)
-					(name "VCC"
-						(effects
-							(font
-								(size 0.508 0.508)
-							)
-						)
-					)
-					(number ""
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_out line
-					(at 19.05 3.81 90)
-					(length 2.54)
-					(name "GND"
-						(effects
-							(font
-								(size 0.508 0.508)
-							)
-						)
-					)
-					(number ""
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
 				(pin output line
 					(at 25.4 15.24 180)
 					(length 2.54)
@@ -443,7 +243,7 @@
 							)
 						)
 					)
-					(number ""
+					(number "1"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -461,7 +261,7 @@
 							)
 						)
 					)
-					(number ""
+					(number "2"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -479,7 +279,43 @@
 							)
 						)
 					)
-					(number ""
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 19.05 19.05 270)
+					(length 2.54)
+					(name "VCC"
+						(effects
+							(font
+								(size 0.508 0.508)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_out line
+					(at 19.05 3.81 90)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 0.508 0.508)
+							)
+						)
+					)
+					(number "5"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2028,6 +1864,34 @@
 		(color 0 0 0 0)
 		(uuid "f39061bd-5e6f-49c9-bc52-efe6ecf149ce")
 	)
+	(no_connect
+		(at 43.18 118.11)
+		(uuid "0080455c-0f9b-4cf7-935e-316bb34af7cc")
+	)
+	(no_connect
+		(at 43.18 114.3)
+		(uuid "009bc13e-510c-4c8f-9550-20b12c923a19")
+	)
+	(no_connect
+		(at 81.28 114.3)
+		(uuid "272ade3a-4aa2-4bdd-9e12-126876092886")
+	)
+	(no_connect
+		(at 217.17 78.74)
+		(uuid "32627672-c31d-48ce-9a24-7867f1c5df4d")
+	)
+	(no_connect
+		(at 116.84 71.12)
+		(uuid "65877efb-0eb0-499c-848d-6e46316259eb")
+	)
+	(no_connect
+		(at 222.25 77.47)
+		(uuid "7cb1d453-1692-4936-9667-a7081f4329a9")
+	)
+	(no_connect
+		(at 81.28 121.92)
+		(uuid "fb73d77c-5152-48aa-ab88-d915402bf837")
+	)
 	(wire
 		(pts
 			(xy 243.84 68.58) (xy 243.84 80.01)
@@ -2290,16 +2154,6 @@
 	)
 	(wire
 		(pts
-			(xy 66.04 127) (xy 74.93 127)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "be85546d-a430-4967-901e-e8155551a3a0")
-	)
-	(wire
-		(pts
 			(xy 27.94 107.95) (xy 27.94 114.3)
 		)
 		(stroke
@@ -2370,6 +2224,16 @@
 	)
 	(wire
 		(pts
+			(xy 66.04 127) (xy 74.93 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ef9f1e0e-4b2f-48b6-afae-be7073dc1d70")
+	)
+	(wire
+		(pts
 			(xy 53.34 107.95) (xy 53.34 121.92)
 		)
 		(stroke
@@ -2433,30 +2297,6 @@
 					(size 1.27 1.27)
 				)
 				(justify left)
-			)
-		)
-	)
-	(global_label "MISO"
-		(shape input)
-		(at 116.84 71.12 180)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "461d4d28-29f0-4c1f-a348-b1dc7a555cb4")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 109.2586 71.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
 			)
 		)
 	)
@@ -2534,7 +2374,7 @@
 	)
 	(global_label "VRY2"
 		(shape input)
-		(at 116.84 63.5 180)
+		(at 116.84 88.9 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -2544,7 +2384,7 @@
 		)
 		(uuid "920991f0-b6a8-482d-b469-3647acc03587")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 109.1981 63.5 0)
+			(at 109.1981 88.9 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2606,17 +2446,17 @@
 	)
 	(global_label "VRX1"
 		(shape input)
-		(at 116.84 66.04 180)
+		(at 182.88 91.44 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify right)
+			(justify left)
 		)
 		(uuid "af3d3415-d5b1-4dbd-94b5-0394e1fcd136")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 109.0772 66.04 0)
+			(at 190.6428 91.44 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2624,7 +2464,7 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
+				(justify left)
 			)
 		)
 	)
@@ -2641,30 +2481,6 @@
 		(uuid "b4c62057-6927-4e40-8b15-9c3e81cd1aef")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 210.3748 83.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-	)
-	(global_label "MISO"
-		(shape output)
-		(at 217.17 78.74 180)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "c28a3e03-5ece-4985-8166-bf82a9ebdd24")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 209.5886 78.74 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2790,19 +2606,19 @@
 				)
 			)
 		)
-		(pin ""
+		(pin "5"
 			(uuid "f1db089e-9458-492b-b67a-6eef4a373175")
 		)
-		(pin ""
+		(pin "2"
 			(uuid "f6541a3f-6008-44d9-88db-18c1e204f1a1")
 		)
-		(pin ""
+		(pin "1"
 			(uuid "3ba55406-1f5d-477c-9a77-07347c7de130")
 		)
-		(pin ""
+		(pin "3"
 			(uuid "7ed6a157-9854-4316-abbd-d19c033f5a5a")
 		)
-		(pin ""
+		(pin "4"
 			(uuid "f2cec77e-10eb-4d7c-b36a-5f54f9f3550c")
 		)
 		(instances
@@ -2886,6 +2702,96 @@
 			(project "ĐIỀU KHIỂN PRO MAX"
 				(path "/7be0df2b-6115-4b1f-891d-0ced7267c0ab"
 					(reference "#PWR05")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_name "Joystick_PS2_1")
+		(lib_id "Joystick PS2:Joystick_PS2")
+		(at 17.78 129.54 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "0dcd5d57-b26f-49bb-aaa3-c3b9a6a3ed8a")
+		(property "Reference" "JOYSTICK1"
+			(at 38.1 118.11 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 0.635 0.635)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" ""
+			(at 17.78 129.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Horizontal"
+			(at 17.78 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 17.78 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 17.78 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "5"
+			(uuid "509360f3-7a60-4ce1-800f-479bec58b151")
+		)
+		(pin "2"
+			(uuid "1af4ea81-bdaa-48c2-ba67-63d77f80dea5")
+		)
+		(pin "1"
+			(uuid "1dbaf186-cffb-47f1-975c-6bb3bfce63fe")
+		)
+		(pin "3"
+			(uuid "33ef5da3-bdce-4af8-b85b-b1d45da66296")
+		)
+		(pin "4"
+			(uuid "b6f42a05-788c-4e3d-813b-8ed742d95fa9")
+		)
+		(instances
+			(project "ĐIỀU KHIỂN PRO MAX"
+				(path "/7be0df2b-6115-4b1f-891d-0ced7267c0ab"
+					(reference "JOYSTICK1")
 					(unit 1)
 				)
 			)
@@ -4124,95 +4030,6 @@
 			(project "ĐIỀU KHIỂN PRO MAX"
 				(path "/7be0df2b-6115-4b1f-891d-0ced7267c0ab"
 					(reference "#PWR09")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Joystick PS2:Joystick_PS2")
-		(at 17.78 129.54 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "fd3a0835-fe41-4e2b-9d81-67386dcb8cd0")
-		(property "Reference" "JOYSTICK1"
-			(at 38.1 118.11 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 0.635 0.635)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" ""
-			(at 17.78 129.54 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Horizontal"
-			(at 17.78 129.54 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 17.78 129.54 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 17.78 129.54 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin ""
-			(uuid "0926fab8-d53e-4b2f-8e71-9780f19e50ed")
-		)
-		(pin ""
-			(uuid "633c1bcb-dc0b-4a0f-8f54-3ac905c898db")
-		)
-		(pin ""
-			(uuid "33f158e5-a60b-4a3c-8a35-295a773a44bb")
-		)
-		(pin ""
-			(uuid "d163d778-8dc8-4233-858c-50fdf59b41c4")
-		)
-		(pin ""
-			(uuid "8bbfbe4b-cb36-4d23-a6d2-0b1038b65361")
-		)
-		(instances
-			(project "ĐIỀU KHIỂN PRO MAX"
-				(path "/7be0df2b-6115-4b1f-891d-0ced7267c0ab"
-					(reference "JOYSTICK1")
 					(unit 1)
 				)
 			)
