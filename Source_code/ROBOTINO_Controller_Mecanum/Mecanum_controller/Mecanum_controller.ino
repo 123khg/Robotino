@@ -2,6 +2,7 @@
 //I finished the simple code with puzzy ahh structure but forgot to optimize it...
 #include <SPI.h>
 #include <RF24.h>
+#include <math.h>
 
 // Define pins
 #define CE_PIN   4
@@ -17,9 +18,9 @@ const uint64_t address = 0x123456789LL;
 RF24 radio(CE_PIN, CSN_PIN);  // Create RF24 object
 
 struct send_dat{
-  int8_t x_coor; //Có thể sẽ có giá trị được map từ -128 đến 127
-  int8_t y_coor; //int8_t là kiểu dữ liệu có dấu và uint8_t là ko dấu (-128;127) 
-  int8_t x_coor1;
+  double theta_send; //Có thể sẽ có giá trị được map từ -128 đến 127
+  double power_send; //int8_t là kiểu dữ liệu có dấu và uint8_t là ko dấu (-128;127) 
+  int16_t omega_send;
 };
 send_dat data;
 
@@ -55,11 +56,15 @@ void loop() {
     uint16_t x_raw = analogRead(JOY_X);
     uint16_t y_raw = analogRead(JOY_Y);
     uint16_t x_raw1 = analogRead(JOY_X1);
+    int16_t dx = x_raw - 2048;
+    int16_t dy = y_raw - 2048;
+
 
     // Map sang -128 ~ 127
-    data.x_coor = map(x_raw, 0, 4095, -128, 127);
-    data.y_coor = map(y_raw, 0, 4095, -128, 127);
-    data.x_coor1 = map(x_raw1, 0, 4095, -128, 127);
+    //Ta sử dụng hẳn giá trị read được để tính theta và vận tốc luôn. và thêm deadzone vào
+    data.theta_send = atan2((double)dy, (double)dx);           // -π ~ +π
+    data.power_send = hypot((double)dx, (double)dy);
+    data.omega_send = map(x_raw1, 0, 4095, -128, 127);
 
     // Gửi dữ liệu
     bool success = radio.write(&data, sizeof(data));

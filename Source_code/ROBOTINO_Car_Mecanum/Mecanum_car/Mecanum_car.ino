@@ -29,8 +29,9 @@ RF24 radio(CE_PIN, CSN_PIN);
 const uint64_t address = 0x1234567890LL;
 
 struct DataPacket {
-    int8_t x_coor;
-    int8_t y_coor;
+  double theta_send; //Có thể sẽ có giá trị được map từ -128 đến 127
+  double power_send; //int8_t là kiểu dữ liệu có dấu và uint8_t là ko dấu (-128;127) 
+  int16_t omega_send;
 };
 DataPacket data;
 
@@ -66,6 +67,23 @@ void setupMotors() {
     ledcAttach(ENA, PWM_FREQ, PWM_RES);
     ledcAttach(ENB, PWM_FREQ, PWM_RES);
 }
+
+//RECEIVED: pOWER, THETA AND OMEGA --> wE HAVE TO OUTPUT THE PWM SIGNALS SATISFY LIMIT AND RIGHT CHOICE
+
+double cos = cos(data.theta_send - (double)(PI/4));
+double sin = sin(data.theta_send - (double)(PI/4));
+double max = max(abs(sin),abs(cos))
+double turn = 
+
+
+
+double v_fl = data.power_send * cos/max +turn;
+double v_fr = data.power_send * sin/max -turn;
+double v_bl = data.power_send * sin/max +turn;
+double v_br = data.power_send * cos/max -turn;
+
+
+
 
 void applyMotor(int speed, uint8_t pwmPin, uint8_t in1, uint8_t in2) {
     if (abs(speed) < DEADZONE) {
