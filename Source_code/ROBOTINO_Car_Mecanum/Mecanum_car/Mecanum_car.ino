@@ -1,5 +1,3 @@
-//Dùng cho xe bánh bình thường
-
 #include <SPI.h>
 #include <RF24.h>
 #include <stdint.h>
@@ -9,20 +7,21 @@
 #define CSN_PIN  10
 
 // Motor Left (A)
-#define IN1  8
-#define IN2  7
-#define ENA  6   // PWM
+#define IN2L  8
+#define IN2R  7
+#define EN2L  6   // PWM cua Enable 2L
+#define EN2R  12
 
 // Motor Right (B)
-#define IN3  5
-#define IN4  4
-#define ENB  3   // PWM
+#define IN4R  5
+#define IN4L  4
+#define EN4R  3   // PWM
+#define EN4L  11
 
 #define PWM_FREQ 5000
 #define PWM_RES 8
 
 #define DEADZONE 15
-
 //RF24
 
 RF24 radio(CE_PIN, CSN_PIN);
@@ -33,6 +32,7 @@ struct DataPacket {
   double power_send; 
   int16_t omega_send;
 };
+
 DataPacket data;
 
 unsigned long last_receive_time = 0;
@@ -47,76 +47,84 @@ void receivedata(){
 void check_failsafe(){
   unsigned long current_time = millis(); 
   if(current_time - last_receive_time >500){
-    data.x_coor = 0;
-    data.y_coor = 0;
+    data.power_send = 0;
+    data.theta_send = 0;
   }
 }
 
-//Note: IN1,2 là điều khiển chiều của động cơ trái; IN3,4 là động cơ phải 
-//Chân ENA là xuất xung tín hiệu PWM để điều khiển tốc độ A 
+//IN2L điều khiển bánh trên trái , IN4L dưới trái. IN2R trên phải, IN4R dưới phải.
+// Ta có 4 chân điều khiển tốc độ. E2L: trên trái, E4L: dưới trái. E2R: trên phải, E4R: dưới phải.
 //Lay data receive duoc de lam input. Va output la gia tri da duoc chinh sua
 
 //Nếu mà IN1, IN2 là 01 hay 10 thì chạy còn 11 sẽ brake!!! --> Nếu x,y thuộc deadzone thì đặt trạng thái brake cho xe không bị trôi
 //Depend on the input, it will define that the motor want to go forward or backward
 // ================== MOTOR CONTROL ==================
 void setupMotors() {
-    pinMode(IN1, OUTPUT); pinMode(IN2, OUTPUT);
-    pinMode(IN3, OUTPUT); pinMode(IN4, OUTPUT);
+    pinMode(IN2L, OUTPUT); pinMode(IN2R, OUTPUT);
+    pinMode(IN4L, OUTPUT); pinMode(IN4R, OUTPUT);
     
     // PWM cho ESP32
-    ledcAttach(ENA, PWM_FREQ, PWM_RES);
-    ledcAttach(ENB, PWM_FREQ, PWM_RES);
+    ledcAttach(EN2L, PWM_FREQ, PWM_RES);
+    ledcAttach(EN4R, PWM_FREQ, PWM_RES);
+    ledcAttach(EN2R, PWM_FREQ, PWM_RES);
+    ledcAttach(EN4L, PWM_FREQ, PWM_RES);
+
 }
 
-//RECEIVED: pOWER, THETA AND OMEGA --> wE HAVE TO OUTPUT THE PWM SIGNALS SATISFY LIMIT AND RIGHT CHOICE
-
-double cos = cos(data.theta_send - (double)(PI/4));
-double sin = sin(data.theta_send - (double)(PI/4));
-double max = max(abs(sin),abs(cos))
-double turn = 
-
-
-
-double v_fl = data.power_send * cos/max +turn;
-double v_fr = data.power_send * sin/max -turn;
-double v_bl = data.power_send * sin/max +turn;
-double v_br = data.power_send * cos/max -turn;
-
-
-
-
-void applyMotor(int speed, uint8_t pwmPin, uint8_t in1, uint8_t in2) {
+void applyMotor(int speed, uint8_t pwmPin, uint8_t dirPin) {
     if (abs(speed) < DEADZONE) {
-        // Brake
-        digitalWrite(in1, HIGH);
-        digitalWrite(in2, HIGH);
+        // Brake: Bắt buộc phanh mềm (tắt PWM) vì dùng cổng NOT
         ledcWrite(pwmPin, 0);
     } 
     else if (speed > 0) {
-        // Forward
-        digitalWrite(in1, HIGH);
-        digitalWrite(in2, LOW);
+        // Forward: Cấp mức HIGH (Cổng NOT sẽ tự đảo LOW cho chân IN còn lại)
+        digitalWrite(dirPin, HIGH);
         ledcWrite(pwmPin, speed);
     } 
     else {
-        // Backward
-        digitalWrite(in1, LOW);
-        digitalWrite(in2, HIGH);
-        ledcWrite(pwmPin, -speed);  // abs(speed)
+        // Backward: Cấp mức LOW
+        digitalWrite(dirPin, LOW);
+        ledcWrite(pwmPin, abs(speed));  // Dùng hàm abs() cho an toàn
     }
 }
 
-void drive(int x, int y) {
-    int leftSpeed  = y + x;
-    int rightSpeed = y - x;
+//RECEIVED: pOWER, THETA AND OMEGA --> wE HAVE TO OUTPUT THE PWM SIGNALS SATISFY LIMIT AND RIGHT CHOICE
+// Nhận vào:
+// - power: Công suất tổng (0 đến 255)
+// - theta: Góc di chuyển tính bằng Radian
+// - turn: Tốc độ xoay (-255 đến 255, âm là xoay trái, dương là xoay phải)
+void driveMecanum(double power, double theta, double turn) {
+    
+    // Đổi tên biến để tránh xung đột với hàm sin(), cos() của C++
+    double cos_val = cos(theta - PI/4.0);
+    double sin_val = sin(theta - PI/4.0);
+    
+    // Tìm giá trị lớn nhất giữa sin và cos để giữ power luôn đạt đỉnh
+    double max_val = max(abs(cos_val), abs(sin_val));
 
-    leftSpeed  = constrain(leftSpeed,  -255, 255);
-    rightSpeed = constrain(rightSpeed, -255, 255);
+    // Tính toán tốc độ thô cho 4 bánh
+    double v_fl = (power * cos_val / max_val) + turn; // Trước - Trái
+    double v_fr = (power * sin_val / max_val) - turn; // Trước - Phải
+    double v_bl = (power * sin_val / max_val) + turn; // Sau - Trái
+    double v_br = (power * cos_val / max_val) - turn; // Sau - Phải
 
-    applyMotor(leftSpeed,  ENA, IN1, IN2);
-    applyMotor(rightSpeed, ENB, IN3, IN4);
+    // Normalization (Chuẩn hóa tỷ lệ)
+    // Nếu tổng lực vọt qua 255, ta phải giảm tốc độ cả 4 bánh xuống theo cùng 1 tỷ lệ
+    // để xe không bị méo quỹ đạo (đi chéo mà bị thành đi thẳng)
+    double max_speed = max(max(abs(v_fl), abs(v_fr)), max(abs(v_bl), abs(v_br)));
+    if (max_speed > 255.0) {
+        v_fl = (v_fl / max_speed) * 255.0;
+        v_fr = (v_fr / max_speed) * 255.0;
+        v_bl = (v_bl / max_speed) * 255.0;
+        v_br = (v_br / max_speed) * 255.0;
+    }
+s
+    // Xuất tín hiệu ra 4 bánh bằng hàm applyMotor đã cấu hình
+    applyMotor((int)v_fl, EN2L, IN2L);
+    applyMotor((int)v_fr, EN2R, IN2R);
+    applyMotor((int)v_bl, EN4L, IN4L);
+    applyMotor((int)v_br, EN4R, IN4R);
 }
-
 // ================== SETUP ==================
 void setup() {
     Serial.begin(115200);

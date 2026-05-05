@@ -24,12 +24,6 @@ struct send_dat{
 };
 send_dat data;
 
-void send_data(){
-  if (radio.available()) {
-    radio.write(&data, sizeof(data));
-  }
-}
-
 void setup() {
     Serial.begin(115200);
     
@@ -63,20 +57,18 @@ void loop() {
     // Map sang -128 ~ 127
     //Ta sử dụng hẳn giá trị read được để tính theta và vận tốc luôn. và thêm deadzone vào
     data.theta_send = atan2((double)dy, (double)dx);           // -π ~ +π
-    data.power_send = hypot((double)dx, (double)dy);
-    data.omega_send = map(x_raw1, 0, 4095, -128, 127);
+    data.power_send = map(hypot((double)dx, (double)dy),0,2048,0,255);
+    data.omega_send = map(x_raw1, 0, 4095, -255, 255);
 
     // Gửi dữ liệu
     bool success = radio.write(&data, sizeof(data));
 
-    // Debug
+    // Debug đã được cập nhật đúng biến mới
     // static uint32_t lastDebug = 0;
     // if (millis() - lastDebug > 200) {
-    //     Serial.printf("Raw X:%4d Y:%4d | Sent X:%4d Y:%4d | %s\n", 
-    //                   x_raw, y_raw, data.x_coor, data.y_coor,
+    //     Serial.printf("Power: %3.0f | Theta: %5.2f | Omega: %4d | %s\n", 
+    //                   data.power_send, data.theta_send, data.omega_send,
     //                   success ? "OK" : "Fail");
     //     lastDebug = millis();
     // }
-
-    delay(20);  // Tần số gửi ~50Hz
 }
