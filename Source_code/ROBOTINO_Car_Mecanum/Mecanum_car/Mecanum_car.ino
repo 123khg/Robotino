@@ -118,7 +118,7 @@ void driveMecanum(double power, double theta, double turn) {
         v_bl = (v_bl / max_speed) * 255.0;
         v_br = (v_br / max_speed) * 255.0;
     }
-s
+
     // Xuất tín hiệu ra 4 bánh bằng hàm applyMotor đã cấu hình
     applyMotor((int)v_fl, EN2L, IN2L);
     applyMotor((int)v_fr, EN2R, IN2R);
@@ -155,20 +155,16 @@ void loop() {
     if (radio.available()) {
         radio.read(&data, sizeof(data));
         last_receive_time = millis();
+        Serial.printf("Gui thanh cong");
     }
 
     // Failsafe
     if (millis() - last_receive_time > 500) {
-        data.x_coor = 0;
-        data.y_coor = 0;
+        data.power_send = 0;
+        data.theta_send = 0;
+        data.omega_send = 0;
     }
-
-    // Map giá trị
-    int pwmX = map(data.x_coor, -128, 127, -255, 255);
-    int pwmY = map(data.y_coor, -128, 127, -255, 255);
-
-    drive(pwmX, pwmY);
-
+    driveMecanum(data.power_send, data.theta_send, data.omega_send);
     // Debug (tắt khi chạy thật)
     // static uint32_t lastDebug = 0;
     // if (millis() - lastDebug > 200) {

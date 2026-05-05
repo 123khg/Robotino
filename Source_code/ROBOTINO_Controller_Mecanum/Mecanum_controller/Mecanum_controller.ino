@@ -24,6 +24,7 @@ struct send_dat{
 };
 send_dat data;
 
+
 void setup() {
     Serial.begin(115200);
     
@@ -36,11 +37,11 @@ void setup() {
         while(1) delay(100);
     }
 
-    radio.setPALevel(RF24_PA_LOW);      // Thấp để tiết kiệm pin
+    radio.setPALevel(RF24_PA_LOW);      
     radio.setDataRate(RF24_1MBPS);
     radio.setChannel(67);
     radio.openWritingPipe(address);
-    radio.stopListening();              // Chế độ Transmitter
+    radio.stopListening();              
 
     Serial.println("Transmitter sẵn sàng!");
 }
@@ -53,22 +54,22 @@ void loop() {
     int16_t dx = x_raw - 2048;
     int16_t dy = y_raw - 2048;
 
-
-    // Map sang -128 ~ 127
     //Ta sử dụng hẳn giá trị read được để tính theta và vận tốc luôn. và thêm deadzone vào
     data.theta_send = atan2((double)dy, (double)dx);           // -π ~ +π
-    data.power_send = map(hypot((double)dx, (double)dy),0,2048,0,255);
+    // ÁP DỤNG THUẬT TOÁN "MAP HÌNH VUÔNG THÀNH HÌNH TRÒN" vì Joystick sẽ khá là ehhhh, khoảng giá trị nó là hình vuông 
+    double x_norm = dx / 2048.0;
+    double y_norm = dy / 2048.0;
+    double x_circular = x_norm * sqrt(1.0 - (y_norm * y_norm / 2.0));
+    double y_circular = y_norm * sqrt(1.0 - (x_norm * x_norm / 2.0));
+    data.power_send = map(2048*hypot((double)x_circular, (double)y_circular),0,2048,0,255);
     data.omega_send = map(x_raw1, 0, 4095, -255, 255);
 
     // Gửi dữ liệu
     bool success = radio.write(&data, sizeof(data));
 
-    // Debug đã được cập nhật đúng biến mới
     // static uint32_t lastDebug = 0;
     // if (millis() - lastDebug > 200) {
-    //     Serial.printf("Power: %3.0f | Theta: %5.2f | Omega: %4d | %s\n", 
-    //                   data.power_send, data.theta_send, data.omega_send,
-    //                   success ? "OK" : "Fail");
+    //     Serial.printf("success ? "OK" : "Fail");
     //     lastDebug = millis();
     // }
 }
