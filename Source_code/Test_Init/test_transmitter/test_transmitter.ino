@@ -2,48 +2,64 @@
 #include <nRF24L01.h>
 #include <RF24.h>
 
-#define CE_PIN   4
-#define CSN_PIN  5
-
-RF24 radio(CE_PIN, CSN_PIN);
-
+RF24 radio(25, 5); // CE, CSN
 const byte address[6] = "00001";
-
+const int ledPin = 2; // LED có sẵn trên board ESP32
 int counter = 0;
 
-void setup() {
+void setup()
+{
   Serial.begin(115200);
-  Serial.println("\n=== NRF24L01 Transmitter - Auto ACK Disabled (Clone Test) ===");
+  pinMode(ledPin, OUTPUT);
 
-  if (!radio.begin()) {
-    Serial.println("Radio not responding!");
-    while (1) {}
+  if (!radio.begin())
+  {
+    Serial.println("nRF24L01 không hoạt động!");
+    while (1)
+      ;
   }
 
+  // 1. Ép công suất xuống thấp để tránh sụt áp và nhiễu (Dù có nguồn ngoài)
   radio.setPALevel(RF24_PA_LOW);
-  radio.setDataRate(RF24_1MBPS);
-radio.setChannel(100);
-radio.openWritingPipe(address);
-radio.openReadingPipe(0, address);   // <-- add this line
-  radio.stopListening();
 
-  // === Key line for clone test ===
-  radio.setAutoAck(false);     // Disable Auto ACK
-  radio.enableDynamicPayloads();
+  // 2. Hạ tốc độ truyền xuống thấp nhất (Giúp chip clone chạy ổn định hơn)
+  radio.setDataRate(RF24_250KBPS);
 
-  Serial.println("Transmitter ready (Auto ACK OFF). Sending every 1s...");
-  radio.printDetails();        // Print config for debugging
+  // 3. Đổi kênh tần số để tránh trùng sóng WiFi 2.4GHz trong nhà
+  radio.setChannel(110);
+
+  // 4. Cố định độ dài gói tin để tránh lỗi Dynamic Payload trên hàng clone
+  radio.enableDynamicPayloads(); // Cho phép gói tin dài ngắn tùy ý (từ 1 đến 32 byte)
+  radio.setAutoAck(true);        // Tính năng này bắt buộc phải bật đi kèm với Dynamic Payload
+  // 5. In toàn bộ thông số ra để kiểm tra địa chỉ và kết nối SPI
+  radio.printDetails();
+  radio.openWritingPipe(address);
+  radio.stopListening(); // Đảm bảo module ở chế độ phát
+  Serial.println("TX Initialized");
+
+  // Các lệnh openWritingPipe hoặc openReadingPipe đặt sau các cấu hình trên
 }
 
-void loop() {
-  char text[32];
-  snprintf(text, sizeof(text), "Hello ESP32 #%d", counter++);
+void loop()
+{
+  bool success = radio.write(&counter, sizeof(counter)); // Gửi dữ liệu
 
+  if (success)
+  {
+    Serial.print("Gui thanh cong: ");
+    Serial.println(counter);
 
-int len = strlen(text) + 1;
-radio.write(&text, len);
-  
-    Serial.println(text);
+    // Nháy LED khi truyền thành công
+    digitalWrite(ledPin, HIGH);
+    delay(50);
+    digitalWrite(ledPin, LOW);
 
-  delay(1000);
+    counter++;
+  }
+  else
+  {
+    Serial.println("Gui thất bại - Kiem tra nguồn/khoảng cách");
+  }
+
+  delay(1000); // Đợi 1 giây rồi gửi tiếp
 }
