@@ -9,14 +9,16 @@
 #define CSN_PIN  10
 
 // Motor Left (A)
-#define IN1  8
-#define IN2  7
-#define ENA  6   // PWM
+#define IN2L  8
+#define IN2R  7
+#define EN2L  6   // PWM cua Enable 2L
+#define EN2R  12
 
 // Motor Right (B)
-#define IN3  5
-#define IN4  4
-#define ENB  3   // PWM
+#define IN4R  5
+#define IN4L  4
+#define EN4R  3   // PWM
+#define EN4L  11
 
 #define PWM_FREQ 5000
 #define PWM_RES 8
@@ -51,40 +53,39 @@ void check_failsafe(){
   }
 }
 
-//Note: IN1,2 là điều khiển chiều của động cơ trái; IN3,4 là động cơ phải 
-//Chân ENA là xuất xung tín hiệu PWM để điều khiển tốc độ A 
+//IN2L điều khiển bánh trên trái , IN4L dưới trái. IN2R trên phải, IN4R dưới phải.
+// Ta có 4 chân điều khiển tốc độ. E2L: trên trái, E4L: dưới trái. E2R: trên phải, E4R: dưới phải.
 //Lay data receive duoc de lam input. Va output la gia tri da duoc chinh sua
 
 //Nếu mà IN1, IN2 là 01 hay 10 thì chạy còn 11 sẽ brake!!! --> Nếu x,y thuộc deadzone thì đặt trạng thái brake cho xe không bị trôi
 //Depend on the input, it will define that the motor want to go forward or backward
 // ================== MOTOR CONTROL ==================
 void setupMotors() {
-    pinMode(IN1, OUTPUT); pinMode(IN2, OUTPUT);
-    pinMode(IN3, OUTPUT); pinMode(IN4, OUTPUT);
+    pinMode(IN2L, OUTPUT); pinMode(IN2R, OUTPUT);
+    pinMode(IN4L, OUTPUT); pinMode(IN4R, OUTPUT);
     
     // PWM cho ESP32
-    ledcAttach(ENA, PWM_FREQ, PWM_RES);
-    ledcAttach(ENB, PWM_FREQ, PWM_RES);
-}
+    ledcAttach(EN2L, PWM_FREQ, PWM_RES);
+    ledcAttach(EN4R, PWM_FREQ, PWM_RES);
+    ledcAttach(EN2R, PWM_FREQ, PWM_RES);
+    ledcAttach(EN4L, PWM_FREQ, PWM_RES);
 
-void applyMotor(int speed, uint8_t pwmPin, uint8_t in1, uint8_t in2) {
+}
+//Khi này brake sẽ là IN2L = IN2R = 0
+void applyMotor(int speed, uint8_t pwmPin, uint8_t dirPin) {
     if (abs(speed) < DEADZONE) {
-        // Brake
-        digitalWrite(in1, HIGH);
-        digitalWrite(in2, HIGH);
+        // Brake: Bắt buộc phanh mềm (tắt PWM) vì dùng cổng NOT
         ledcWrite(pwmPin, 0);
     } 
     else if (speed > 0) {
-        // Forward
-        digitalWrite(in1, HIGH);
-        digitalWrite(in2, LOW);
+        // Forward: Cấp mức HIGH (Cổng NOT sẽ tự đảo LOW cho chân IN còn lại)
+        digitalWrite(dirPin, HIGH);
         ledcWrite(pwmPin, speed);
     } 
     else {
-        // Backward
-        digitalWrite(in1, LOW);
-        digitalWrite(in2, HIGH);
-        ledcWrite(pwmPin, -speed);  // abs(speed)
+        // Backward: Cấp mức LOW
+        digitalWrite(dirPin, LOW);
+        ledcWrite(pwmPin, abs(speed));  // Dùng hàm abs() cho an toàn
     }
 }
 
@@ -95,8 +96,13 @@ void drive(int x, int y) {
     leftSpeed  = constrain(leftSpeed,  -255, 255);
     rightSpeed = constrain(rightSpeed, -255, 255);
 
-    applyMotor(leftSpeed,  ENA, IN1, IN2);
-    applyMotor(rightSpeed, ENB, IN3, IN4);
+    // Xuất tín hiệu cho 2 bánh BÊN TRÁI
+    applyMotor(leftSpeed,  EN2L, IN2L); // Bánh trên trái
+    applyMotor(leftSpeed,  EN4L, IN4L); // Bánh dưới trái
+    
+    // Xuất tín hiệu cho 2 bánh BÊN PHẢI
+    applyMotor(rightSpeed, EN2R, IN2R); // Bánh trên phải
+    applyMotor(rightSpeed, EN4R, IN4R); // Bánh dưới phải
 }
 
 // ================== SETUP ==================

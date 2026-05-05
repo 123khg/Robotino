@@ -29,8 +29,8 @@ RF24 radio(CE_PIN, CSN_PIN);
 const uint64_t address = 0x1234567890LL;
 
 struct DataPacket {
-  double theta_send; //Có thể sẽ có giá trị được map từ -128 đến 127
-  double power_send; //int8_t là kiểu dữ liệu có dấu và uint8_t là ko dấu (-128;127) 
+  double theta_send; 
+  double power_send; 
   int16_t omega_send;
 };
 DataPacket data;
