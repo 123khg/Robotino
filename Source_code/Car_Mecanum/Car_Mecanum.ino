@@ -7,16 +7,16 @@
 #define CSN_PIN  16
 
 // Motor Left (A)
-#define IN2L  25
-#define IN2R  14
-#define EN2L  26   // PWM cua Enable 2L
-#define EN2R  21
+#define IN4L  25
+#define IN4R  14
+#define EN4L  26   // PWM cua Enable 2L
+#define EN4R  21
 
 // Motor Right (B)
-#define IN4R  27
-#define IN4L  32
-#define EN4L  33
-#define EN4R  22  
+#define IN2R  27
+#define IN2L  32
+#define EN2L  33
+#define EN2R  22  
 
 #define PWM_FREQ 5000
 #define PWM_RES 8
@@ -36,6 +36,7 @@ struct DataPacket {
 DataPacket data = {0, 0, 0};
 
 unsigned long last_receive_time = 0;
+bool debug = false;
 
 /*Create module receive data (including failsafe)*/
 void receivedata(){
@@ -72,6 +73,7 @@ void setupMotors() {
 }
 
 void applyMotor(int speed, uint8_t pwmPin, uint8_t dirPin) {
+    if (debug) Serial.println("Pin " + String(dirPin) + " at speed " + String(speed));
     if (abs(speed) < DEADZONE) {
         // Brake: Bắt buộc phanh mềm (tắt PWM) vì dùng cổng NOT
         ledcWrite(pwmPin, 0);
@@ -96,8 +98,8 @@ void applyMotor(int speed, uint8_t pwmPin, uint8_t dirPin) {
 void driveMecanum(double power, double theta, double turn) {
     
     // Đổi tên biến để tránh xung đột với hàm sin(), cos() của C++
-    double cos_val = cos(theta + PI/4.0);
     double sin_val = sin(theta + PI/4.0);
+    double cos_val = cos(theta + PI/4.0);
     
     // Tìm giá trị lớn nhất giữa sin và cos để giữ power luôn đạt đỉnh
     double max_val = max(abs(cos_val), abs(sin_val));
@@ -161,7 +163,7 @@ bool isValidNumber(String str) {
 void serialCommand() {
   if (Serial.available() > 0) {
     bool valid = true;
-    String cmdSelect = readWord(); // "power", "theta", "turn", "run", "restart"
+    String cmdSelect = readWord(); // "power", "theta", "turn", "run", "debug", "restart"
     String cmdMode;
     // String cmdState;
     int stateVal;
@@ -220,6 +222,16 @@ void serialCommand() {
             else
                 valid = false;
         }
+        else if (cmdSelect == "debug") {
+            if (index >= 1) {
+              debug = true;
+              Serial.println("Debug set to 1");
+            }
+            else {
+              debug = false;
+              Serial.println("Debug set to 0");
+            }
+        }
     }
 
     if (!valid) {
@@ -240,7 +252,7 @@ void setup() {
     
     if (!radio.begin()) {
         Serial.println("RF24 không khởi động được!");
-        while(1) delay(100);  // Dừng nếu lỗi
+        // while(1) delay(100);  // Dừng nếu lỗi
     }
     
     radio.setPALevel(RF24_PA_LOW);
@@ -263,6 +275,7 @@ void loop() {
     if (radio.available()) {
         radio.read(&data, sizeof(data));
         last_receive_time = millis();
+        Serial.println("Car running at: " + String(data.omega_send) + " " + String(data.omega_send) + " " + String(data.omega_send));
         Serial.printf("Gui thanh cong");
     }
 
