@@ -3,20 +3,20 @@
 #include <stdint.h>
 
 // ================== PIN CONFIG ==================
-#define CE_PIN   9
-#define CSN_PIN  10
+#define CE_PIN   17
+#define CSN_PIN  16
 
 // Motor Left (A)
-#define IN2L  8
-#define IN2R  7
-#define EN2L  6   // PWM cua Enable 2L
-#define EN2R  12
+#define IN2L  25
+#define IN2R  14
+#define EN2L  26   // PWM cua Enable 2L
+#define EN2R  21
 
 // Motor Right (B)
-#define IN4R  5
-#define IN4L  4
-#define EN4R  3   // PWM
-#define EN4L  11
+#define IN4R  27
+#define IN4L  32
+#define EN4L  33
+#define EN4R  22  
 
 #define PWM_FREQ 5000
 #define PWM_RES 8
@@ -33,7 +33,7 @@ struct DataPacket {
   int16_t omega_send;
 };
 
-DataPacket data;
+DataPacket data = {0, 0, 0};
 
 unsigned long last_receive_time = 0;
 
@@ -125,6 +125,112 @@ void driveMecanum(double power, double theta, double turn) {
     applyMotor((int)v_bl, EN4L, IN4L);
     applyMotor((int)v_br, EN4R, IN4R);
 }
+
+// ================== DEBUG ==================
+String readWord() {
+  char c;
+  String word = "";
+  while (true) {
+    if (Serial.available() > 0) {
+      c = Serial.read();
+      if (c == ' ' || c == '\n')
+        break;
+      word += c;
+    }
+    else
+      return "";
+  }
+  return word;
+}
+
+bool isValidNumber(String str) {
+    if (str.length() == 0) return false;
+    
+    for (int i = 0; i < str.length(); i++) {
+        // Allow a minus sign only at the very beginning
+        if (i == 0 && str[i] == '-') {
+            if (str.length() == 1) return false; // Case where input is just "-"
+            continue;
+        }
+        // If any character isn't a digit, it's not a valid number
+        if (!isdigit(str[i])) return false;
+    }
+    return true;
+}
+
+void serialCommand() {
+  if (Serial.available() > 0) {
+    bool valid = true;
+    String cmdSelect = readWord(); // "power", "theta", "turn", "run", "restart"
+    String cmdMode;
+    // String cmdState;
+    int stateVal;
+    // Special command
+    if (cmdSelect == "restart") {
+      // Flush serial buffer 
+      while (Serial.available() > 0) 
+        char temp = Serial.read();
+      ESP.restart();
+    }
+    else if (cmdSelect == "")
+      return;
+    
+    cmdMode = readWord();
+    /* 
+    power: Công suất tổng (0 đến 255)
+    theta: Góc di chuyển tính bằng Độ, sẽ convert sang Radian sau (0 - 360)
+    turn: Tốc độ xoay (-255 đến 255, âm là xoay trái, dương là xoay phải)
+    */
+    // check cmdMode for numbers
+    if (!isValidNumber(cmdMode))
+        valid = false;
+    
+    // Process command
+    if (valid) {
+        int index = cmdMode.toInt();
+        if (cmdSelect == "power") {
+            if (index >= 0 && index <= 255) {
+                data.power_send = index;
+                Serial.println("Power set to " + String(data.power_send));
+            }
+            else
+                valid = false;
+        }
+        else if (cmdSelect == "theta") {
+            if (index >= 0 && index <= 255){
+                data.theta_send = (float)index / 180.0 * PI;
+                Serial.println("Theta set to " + String(data.theta_send));
+            }
+            else
+                valid = false;
+        }
+        else if (cmdSelect == "turn") {
+            if (index >= -255 && index <= 255) {
+                data.omega_send = index;
+                Serial.println("Turn set to " + String(data.omega_send));
+            }
+            else
+                valid = false;
+        }
+        else if (cmdSelect == "run") {
+            if (index >= 1) {
+                driveMecanum(data.power_send, data.theta_send, data.omega_send);
+                Serial.println("Car running at: " + String(data.omega_send) + " " + String(data.omega_send) + " " + String(data.omega_send));
+            }
+            else
+                valid = false;
+        }
+    }
+
+    if (!valid) {
+      Serial.println("Command not found: " + cmdSelect + " " + cmdMode);
+      // Flush serial buffer
+      while (Serial.available() > 0) 
+        char temp = Serial.read();
+    }
+  }
+}
+
 // ================== SETUP ==================
 void setup() {
     Serial.begin(115200);
@@ -151,6 +257,7 @@ void setup() {
 //Xuat tin hieu ra cac chan
 // ================== LOOP ==================
 void loop() {
+    serialCommand();
     // Nhận dữ liệu
     if (radio.available()) {
         radio.read(&data, sizeof(data));
@@ -158,12 +265,13 @@ void loop() {
         Serial.printf("Gui thanh cong");
     }
 
-    // Failsafe
-    if (millis() - last_receive_time > 500) {
-        data.power_send = 0;
-        data.theta_send = 0;
-        data.omega_send = 0;
-    }
+    // // Failsafe
+    // if (millis() - last_receive_time > 500) {
+    //     data.power_send = 0;
+    //     data.theta_send = 0;
+    //     data.omega_send = 0;
+    // }
+
     driveMecanum(data.power_send, data.theta_send, data.omega_send);
     // Debug (tắt khi chạy thật)
     // static uint32_t lastDebug = 0;
@@ -171,4 +279,6 @@ void loop() {
     //     Serial.printf("X:%d Y:%d | L:%d R:%d\n", data.x_coor, data.y_coor, pwmX, pwmY);
     //     lastDebug = millis();
     // }
+
+    delay(10);
 }
