@@ -18,7 +18,6 @@ const int PWMResolution = 8;
 const int rightMotorPWMSpeedChannel = 4;
 const int leftMotorPWMSpeedChannel = 5;
 
-
 #define PHONE_ORIENTATION_PORTRAIT
 
 void rotateMotor(int rightMotorSpeed, int leftMotorSpeed)
@@ -92,7 +91,6 @@ void loop()
   int leftMotorSpeed = 0;
   
   Dabble.processInput();
-  
   
   if (GamePad.isLeftPressed()) 
   {

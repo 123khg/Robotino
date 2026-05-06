@@ -164,6 +164,7 @@ void loop() {
         data.theta_send = 0;
         data.omega_send = 0;
     }
+    
     driveMecanum(data.power_send, data.theta_send, data.omega_send);
     // Debug (tắt khi chạy thật)
     // static uint32_t lastDebug = 0;
