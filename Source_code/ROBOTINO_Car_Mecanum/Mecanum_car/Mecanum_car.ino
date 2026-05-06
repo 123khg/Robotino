@@ -2,6 +2,12 @@
 #include <RF24.h>
 #include <stdint.h>
 
+//Dabble debug
+#define CUSTOM_SETTINGS
+#define INCLUDE_GAMEPAD_MODULE
+#include <DabbleESP32.h>
+
+
 // ================== PIN CONFIG ==================
 #define CE_PIN   9
 #define CSN_PIN  10
