@@ -5,16 +5,23 @@
 #include <math.h>
 
 // Define pins
-#define CE_PIN   4
-#define CSN_PIN  5
+#define CE_PIN   27
+#define CSN_PIN  25
 
-#define JOY_X 2
-#define JOY_Y 1
-#define JOY_X1 3
+#define HSPI_MISO   12
+#define HSPI_MOSI   13
+#define HSPI_SCLK   14
+#define HSPI_SS     15
+
+#define JOY_X 26
+#define JOY_Y 33
+#define JOY_X1 36
 
 // Địa chỉ pipe phải trùng với bên nhận
-const uint64_t address = 0x123456789LL;
-//
+const uint64_t address = 0xE7E7E7E7E7LL;
+
+SPIClass *hspi = new SPIClass(HSPI);
+
 RF24 radio(CE_PIN, CSN_PIN);  // Create RF24 object
 
 struct send_dat{
@@ -27,12 +34,13 @@ send_dat data;
 
 void setup() {
     Serial.begin(115200);
-    
+    hspi->begin(HSPI_SCLK, HSPI_MISO, HSPI_MOSI, HSPI_SS);
+
     pinMode(JOY_X, INPUT);
     pinMode(JOY_Y, INPUT);
     pinMode(JOY_X1,INPUT); 
 
-    if (!radio.begin()) {
+    if (!radio.begin(hspi)) {
         Serial.println("RF24 không khởi động được!");
         while(1) delay(100);
     }

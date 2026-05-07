@@ -5,6 +5,10 @@
 // ================== PIN CONFIG ==================
 #define CE_PIN   17
 #define CSN_PIN  16
+#define HSPI_MISO   12
+#define HSPI_MOSI   13
+#define HSPI_SCLK   14
+#define HSPI_SS     15
 
 // Motor Left (A)
 #define IN4L  25
@@ -23,9 +27,10 @@
 
 #define DEADZONE 15
 //RF24
+SPIClass *hspi = new SPIClass(HSPI);
 
 RF24 radio(CE_PIN, CSN_PIN);
-const uint64_t address = 0x1234567890LL;
+const uint64_t address = 0xE7E7E7E7E7LL;
 
 struct DataPacket {
   double theta_send; 
@@ -247,6 +252,8 @@ void serialCommand() {
 void setup() {
     Serial.begin(115200);
     // Dabble.begin("MyESP32"); 
+    hspi->begin(HSPI_SCLK, HSPI_MISO, HSPI_MOSI, HSPI_SS);
+
 
     setupMotors();
     
@@ -276,10 +283,10 @@ void loop() {
         radio.read(&data, sizeof(data));
         last_receive_time = millis();
         Serial.println("Car running at: " + String(data.omega_send) + " " + String(data.omega_send) + " " + String(data.omega_send));
-        Serial.printf("Gui thanh cong");
+        Serial.printf("nhan thanh cong");
     }
 
-    // // Failsafe
+    // // FailsafeS
     // if (millis() - last_receive_time > 500) {
     //     data.power_send = 0;
     //     data.theta_send = 0;
@@ -294,5 +301,5 @@ void loop() {
     //     lastDebug = millis();
     // }
 
-    delay(10);
+    delay(1000);
 }
