@@ -2,6 +2,31 @@
 #include <RF24.h>
 #include <stdint.h>
 
+#include <DabbleESP32.h>
+#define BLUETOOTH_NAME "ESP32_Snake"
+
+// ================== STRUCT ==================
+struct Counter_t {
+  uint32_t interval; // millis/micros
+  uint32_t time;
+};
+Counter_t RF24_counter = {200, 0}, dabble_counter = {50, 0}, motor_counter = {5, 0};
+
+struct DataPacket_t {
+  double theta; 
+  double power; 
+  int16_t omega;
+};
+DataPacket_t data = {0, 0, 0};
+
+struct DabbleInput_t {
+  float radius;
+  float angle;
+  bool left;
+  bool right;
+};
+DabbleInput_t dabbleInput;
+
 // ================== PIN CONFIG ==================
 #define CE_PIN   17
 #define CSN_PIN  16
@@ -22,36 +47,27 @@
 #define PWM_RES 8
 
 #define DEADZONE 15
-//RF24
 
+// ================== RF24 CONFIG ==================
 RF24 radio(CE_PIN, CSN_PIN);
 const uint64_t address = 0x1234567890LL;
 
-struct DataPacket {
-  double theta_send; 
-  double power_send; 
-  int16_t omega_send;
-};
-
-DataPacket data = {0, 0, 0};
-
-unsigned long last_receive_time = 0;
 bool debug = false;
 
 /*Create module receive data (including failsafe)*/
-void receivedata(){
-  if (radio.available()) {
-    radio.read(&data, sizeof(data));
-    last_receive_time = millis(); // Cập nhật thời gian khi nhận được lệnh
-  }
-}
-void check_failsafe(){
-  unsigned long current_time = millis(); 
-  if(current_time - last_receive_time >500){
-    data.power_send = 0;
-    data.theta_send = 0;
-  }
-}
+// void receivedata(){
+//   if (radio.available()) {
+//     radio.read(&data, sizeof(data));
+//     last_receive_time = millis(); // Cập nhật thời gian khi nhận được lệnh
+//   }
+// }
+// void check_failsafe(){
+//   unsigned long current_time = millis(); 
+//   if(current_time - last_receive_time >500){
+//     data.power = 0;
+//     data.theta = 0;
+//   }
+// }
 
 //IN2L điều khiển bánh trên trái , IN4L dưới trái. IN2R trên phải, IN4R dưới phải.
 // Ta có 4 chân điều khiển tốc độ. E2L: trên trái, E4L: dưới trái. E2R: trên phải, E4R: dưới phải.
@@ -64,29 +80,23 @@ void setupMotors() {
     pinMode(IN2L, OUTPUT); pinMode(IN2R, OUTPUT);
     pinMode(IN4L, OUTPUT); pinMode(IN4R, OUTPUT);
     
-    // PWM cho ESP32
-    ledcAttach(EN2L, PWM_FREQ, PWM_RES);
-    ledcAttach(EN4R, PWM_FREQ, PWM_RES);
-    ledcAttach(EN2R, PWM_FREQ, PWM_RES);
-    ledcAttach(EN4L, PWM_FREQ, PWM_RES);
-
+    pinMode(EN2L, OUTPUT);
+    pinMode(EN4R, OUTPUT);
+    pinMode(EN2R, OUTPUT);
+    pinMode(EN4L, OUTPUT);
 }
 
 void applyMotor(int speed, uint8_t pwmPin, uint8_t dirPin) {
-    if (debug) Serial.println("Pin " + String(dirPin) + " at speed " + String(speed));
     if (abs(speed) < DEADZONE) {
-        // Brake: Bắt buộc phanh mềm (tắt PWM) vì dùng cổng NOT
-        ledcWrite(pwmPin, 0);
+        analogWrite(pwmPin, 0); 
     } 
     else if (speed > 0) {
-        // Forward: Cấp mức HIGH (Cổng NOT sẽ tự đảo LOW cho chân IN còn lại)
         digitalWrite(dirPin, HIGH);
-        ledcWrite(pwmPin, speed);
+        analogWrite(pwmPin, speed); // Just like Arduino
     } 
     else {
-        // Backward: Cấp mức LOW
         digitalWrite(dirPin, LOW);
-        ledcWrite(pwmPin, abs(speed));  // Dùng hàm abs() cho an toàn
+        analogWrite(pwmPin, abs(speed));
     }
 }
 
@@ -128,7 +138,33 @@ void driveMecanum(double power, double theta, double turn) {
     applyMotor((int)v_br, EN4R, IN4R);
 }
 
-// ================== DEBUG ==================
+
+//-------------------------------------------------------
+//                    INPUT AND UPDATE 
+//-------------------------------------------------------
+void getInput() {
+  Dabble.processInput();
+
+  // Read all 10 buttons for game controls and settings
+  dabbleInput.radius = (float) GamePad.getRadius() / 7.0 * 255.0; // power
+  dabbleInput.angle = (float) GamePad.getAngle() / 180.0 * PI; // Radian 
+  dabbleInput.left = GamePad.isSquarePressed();
+  dabbleInput.right = GamePad.isCirclePressed();
+  // dabbleInput.forward = GamePad.isUpPressed();
+  // dabbleInput.backward = GamePad.isDownPressed();
+  // dabbleInput.left = GamePad.isLeftPressed();
+  // dabbleInput.right = GamePad.isRightPressed();
+  // dabbleInput.start  = GamePad.isStartPressed();
+  // dabbleInput.select = GamePad.isSelectPressed();
+
+  data.power = dabbleInput.radius;
+  data.theta = dabbleInput.angle;
+  data.omega = dabbleInput.left * -90 + dabbleInput.right * 90;
+}
+
+//-------------------------------------------------------
+//                    DEBUG 
+//-------------------------------------------------------
 String readWord() {
   char c;
   String word = "";
@@ -192,32 +228,32 @@ void serialCommand() {
         int index = cmdMode.toInt();
         if (cmdSelect == "power") {
             if (index >= 0 && index <= 255) {
-                data.power_send = index;
-                Serial.println("Power set to " + String(data.power_send));
+                data.power = index;
+                Serial.println("Power set to " + String(data.power));
             }
             else
                 valid = false;
         }
         else if (cmdSelect == "theta") {
             if (index >= 0 && index <= 255){
-                data.theta_send = (float)index / 180.0 * PI;
-                Serial.println("Theta set to " + String(data.theta_send));
+                data.theta = (float)index / 180.0 * PI;
+                Serial.println("Theta set to " + String(data.theta));
             }
             else
                 valid = false;
         }
         else if (cmdSelect == "turn") {
             if (index >= -255 && index <= 255) {
-                data.omega_send = index;
-                Serial.println("Turn set to " + String(data.omega_send));
+                data.omega = index;
+                Serial.println("Turn set to " + String(data.omega));
             }
             else
                 valid = false;
         }
         else if (cmdSelect == "run") {
             if (index >= 1) {
-                driveMecanum(data.power_send, data.theta_send, data.omega_send);
-                Serial.println("Car running at: " + String(data.omega_send) + " " + String(data.omega_send) + " " + String(data.omega_send));
+                driveMecanum(data.power, data.theta, data.omega);
+                Serial.println("Car running at: " + String(data.omega) + " " + String(data.omega) + " " + String(data.omega));
             }
             else
                 valid = false;
@@ -243,55 +279,60 @@ void serialCommand() {
   }
 }
 
-// ================== SETUP ==================
+//-------------------------------------------------------
+//                    SETUP 
+//-------------------------------------------------------
 void setup() {
-    Serial.begin(115200);
-    
-    setupMotors();
-    
-    if (!radio.begin()) {
-        Serial.println("RF24 không khởi động được!");
-        // while(1) delay(100);  // Dừng nếu lỗi
-    }
-    
+  Serial.begin(115200);
+  
+  Dabble.begin(BLUETOOTH_NAME);
+  Serial.println("Dabble ready. Waiting for connection...");
+  
+  setupMotors();
+  
+  if (!radio.begin()) {
+    Serial.println("RF24 không khởi động được!");
+    // while(1) delay(100);  // Dừng nếu lỗi
+  }
+  else {    
     radio.setPALevel(RF24_PA_LOW);
     radio.setDataRate(RF24_1MBPS);
     radio.setChannel(67);
     radio.openReadingPipe(0, address);
     radio.startListening();
-    
-    Serial.println("Xe sẵn sàng!");
+  }
+  
+  
+  Serial.println("Xe sẵn sàng!");
 }
 
-//Receive data 
-//setup pwm, output pin (setup_motor)
-//Check fail safe
-//Xuat tin hieu ra cac chan
-// ================== LOOP ==================
+//-------------------------------------------------------
+//                    LOOP 
+//-------------------------------------------------------
 void loop() {
+  // Get data
+  if (millis() - dabble_counter.time >= dabble_counter.interval) {
     serialCommand();
-    // Nhận dữ liệu
-    if (radio.available()) {
-        radio.read(&data, sizeof(data));
-        last_receive_time = millis();
-        Serial.println("Car running at: " + String(data.omega_send) + " " + String(data.omega_send) + " " + String(data.omega_send));
-        Serial.printf("Gui thanh cong");
-    }
+    getInput();
+    dabble_counter.time = millis();
+  }
+  
+  // Nhận dữ liệu
+  // if (radio.available()) {
+  //     radio.read(&data, sizeof(data));
+  //     last_receive_time = millis();
+  //     Serial.println("Car running at: " + String(data.omega) + " " + String(data.omega) + " " + String(data.omega));
+  //     Serial.printf("Gui thanh cong");
+  // }
 
-    // // Failsafe
-    // if (millis() - last_receive_time > 500) {
-    //     data.power_send = 0;
-    //     data.theta_send = 0;
-    //     data.omega_send = 0;
-    // }
-
-    driveMecanum(data.power_send, data.theta_send, data.omega_send);
-    // Debug (tắt khi chạy thật)
-    // static uint32_t lastDebug = 0;
-    // if (millis() - lastDebug > 200) {
-    //     Serial.printf("X:%d Y:%d | L:%d R:%d\n", data.x_coor, data.y_coor, pwmX, pwmY);
-    //     lastDebug = millis();
-    // }
-
-    delay(10);
+  if (millis() - motor_counter.time >= motor_counter.interval) {
+    driveMecanum(data.power, data.theta, data.omega);
+    motor_counter.time = millis();
+  }
+  // Debug (tắt khi chạy thật)
+  // static uint32_t lastDebug = 0;
+  // if (millis() - lastDebug > 200) {
+  //     Serial.printf("X:%d Y:%d | L:%d R:%d\n", data.x_coor, data.y_coor, pwmX, pwmY);
+  //     lastDebug = millis();
+  // }
 }
