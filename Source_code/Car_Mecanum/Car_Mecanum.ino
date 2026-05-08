@@ -17,7 +17,14 @@ struct DataPacket_t {
   double power; 
   int16_t omega;
 };
-DataPacket_t data = {0, 0, 0};
+DataPacket_t data0 = {0, 0, 0};
+
+struct DataPacket_normal_t{
+  int16_t speedX;
+  int16_t speedY;
+};
+
+DataPacket_normal_t data = {0,0};
 
 struct DabbleInput_t {
   float radius;
@@ -28,8 +35,12 @@ struct DabbleInput_t {
 DabbleInput_t dabbleInput;
 
 // ================== PIN CONFIG ==================
-#define CE_PIN   17
-#define CSN_PIN  16
+// #define CE_PIN   17
+// #define CSN_PIN  16
+// #define HSPI_MISO   12
+// #define HSPI_MOSI   13
+// #define HSPI_SCLK   14
+// #define HSPI_SS     15
 
 // Motor Left (A)
 #define IN4L  25
@@ -48,9 +59,13 @@ DabbleInput_t dabbleInput;
 
 #define DEADZONE 15
 
-// ================== RF24 CONFIG ==================
-RF24 radio(CE_PIN, CSN_PIN);
-const uint64_t address = 0x1234567890LL;
+#define SCALE_x 1
+#define SCALE_y 1
+
+
+// // ================== RF24 CONFIG ==================
+// RF24 radio(CE_PIN, CSN_PIN);
+// const uint64_t address = 0xE7E7E7E7E7LL;
 
 bool debug = false;
 
@@ -105,39 +120,54 @@ void applyMotor(int speed, uint8_t pwmPin, uint8_t dirPin) {
 // - power: Công suất tổng (0 đến 255)
 // - theta: Góc di chuyển tính bằng Radian
 // - turn: Tốc độ xoay (-255 đến 255, âm là xoay trái, dương là xoay phải)
-void driveMecanum(double power, double theta, double turn) {
+// void driveMecanum(double power, double theta, double turn) {
     
-    // Đổi tên biến để tránh xung đột với hàm sin(), cos() của C++
-    double sin_val = sin(theta + PI/4.0);
-    double cos_val = cos(theta + PI/4.0);
+//     // Đổi tên biến để tránh xung đột với hàm sin(), cos() của C++
+//     double sin_val = sin(theta + PI/4.0);
+//     double cos_val = cos(theta + PI/4.0);
     
-    // Tìm giá trị lớn nhất giữa sin và cos để giữ power luôn đạt đỉnh
-    double max_val = max(abs(cos_val), abs(sin_val));
+//     // Tìm giá trị lớn nhất giữa sin và cos để giữ power luôn đạt đỉnh
+//     double max_val = max(abs(cos_val), abs(sin_val));
 
-    // Tính toán tốc độ thô cho 4 bánh
-    double v_fl = (power * cos_val / max_val) + turn; // Trước - Trái
-    double v_fr = (power * sin_val / max_val) - turn; // Trước - Phải
-    double v_bl = (power * sin_val / max_val) + turn; // Sau - Trái
-    double v_br = (power * cos_val / max_val) - turn; // Sau - Phải
+//     // Tính toán tốc độ thô cho 4 bánh
+//     double v_fl = (power * cos_val / max_val) + turn; // Trước - Trái
+//     double v_fr = (power * sin_val / max_val) - turn; // Trước - Phải
+//     double v_bl = (power * sin_val / max_val) + turn; // Sau - Trái
+//     double v_br = (power * cos_val / max_val) - turn; // Sau - Phải
 
-    // Normalization (Chuẩn hóa tỷ lệ)
-    // Nếu tổng lực vọt qua 255, ta phải giảm tốc độ cả 4 bánh xuống theo cùng 1 tỷ lệ
-    // để xe không bị méo quỹ đạo (đi chéo mà bị thành đi thẳng)
-    double max_speed = max(max(abs(v_fl), abs(v_fr)), max(abs(v_bl), abs(v_br)));
-    if (max_speed > 255.0) {
-        v_fl = (v_fl / max_speed) * 255.0;
-        v_fr = (v_fr / max_speed) * 255.0;
-        v_bl = (v_bl / max_speed) * 255.0;
-        v_br = (v_br / max_speed) * 255.0;
-    }
+//     // Normalization (Chuẩn hóa tỷ lệ)
+//     // Nếu tổng lực vọt qua 255, ta phải giảm tốc độ cả 4 bánh xuống theo cùng 1 tỷ lệ
+//     // để xe không bị méo quỹ đạo (đi chéo mà bị thành đi thẳng)
+//     double max_speed = max(max(abs(v_fl), abs(v_fr)), max(abs(v_bl), abs(v_br)));
+//     if (max_speed > 255.0) {
+//         v_fl = (v_fl / max_speed) * 255.0;
+//         v_fr = (v_fr / max_speed) * 255.0;
+//         v_bl = (v_bl / max_speed) * 255.0;
+//         v_br = (v_br / max_speed) * 255.0;
+//     }
 
-    // Xuất tín hiệu ra 4 bánh bằng hàm applyMotor đã cấu hình
-    applyMotor((int)v_fl, EN2L, IN2L);
-    applyMotor((int)v_fr, EN2R, IN2R);
-    applyMotor((int)v_bl, EN4L, IN4L);
-    applyMotor((int)v_br, EN4R, IN4R);
+//     // Xuất tín hiệu ra 4 bánh bằng hàm applyMotor đã cấu hình
+//     applyMotor((int)v_fl, EN2L, IN2L);
+//     applyMotor((int)v_fr, EN2R, IN2R);
+//     applyMotor((int)v_bl, EN4L, IN4L);
+//     applyMotor((int)v_br, EN4R, IN4R);
+// }
+
+void driveNormal(int x, int y) {
+    int leftSpeed  = y + x;
+    int rightSpeed = y - x;
+
+    leftSpeed  = constrain(leftSpeed,  -255, 255);
+    rightSpeed = constrain(rightSpeed, -255, 255);
+
+    // Xuất tín hiệu cho 2 bánh BÊN TRÁI
+    applyMotor(leftSpeed,  EN2L, IN2L); // Bánh trên trái
+    applyMotor(leftSpeed,  EN4L, IN4L); // Bánh dưới trái
+    
+    // Xuất tín hiệu cho 2 bánh BÊN PHẢI
+    applyMotor(rightSpeed, EN2R, IN2R); // Bánh trên phải
+    applyMotor(rightSpeed, EN4R, IN4R); // Bánh dưới phải
 }
-
 
 //-------------------------------------------------------
 //                    INPUT AND UPDATE 
@@ -146,20 +176,24 @@ void getInput() {
   Dabble.processInput();
 
   // Read all 10 buttons for game controls and settings
-  dabbleInput.radius = (float) GamePad.getRadius() / 7.0 * 255.0; // power
-  dabbleInput.angle = (float) GamePad.getAngle() / 180.0 * PI; // Radian 
+  // dabbleInput.radius = (float) GamePad.getRadius() / 7.0 * 255.0; // power
+  // dabbleInput.angle = (float) GamePad.getAngle() / 180.0 * PI; // Radian 
   dabbleInput.left = GamePad.isSquarePressed();
   dabbleInput.right = GamePad.isCirclePressed();
-  // dabbleInput.forward = GamePad.isUpPressed();
-  // dabbleInput.backward = GamePad.isDownPressed();
+  dabbleInput.forward = GamePad.isUpPressed();
+  dabbleInput.backward = GamePad.isDownPressed();
   // dabbleInput.left = GamePad.isLeftPressed();
   // dabbleInput.right = GamePad.isRightPressed();
   // dabbleInput.start  = GamePad.isStartPressed();
   // dabbleInput.select = GamePad.isSelectPressed();
 
-  data.power = dabbleInput.radius;
-  data.theta = dabbleInput.angle;
-  data.omega = dabbleInput.left * -90 + dabbleInput.right * 90;
+  // data.power = dabbleInput.radius;
+  // data.theta = dabbleInput.angle;
+  // data.omega = dabbleInput.left * -90 + dabbleInput.right * 90;
+  if(dabbleInput.left) data.speedX = -90;
+  if(dabbleInput.right) data.speedX = 90;
+  if(dabbleInput.forward) data.speedY = 200;
+  if(dabbleInput.backward) data.speedY = -200;
 }
 
 //-------------------------------------------------------
@@ -290,16 +324,16 @@ void setup() {
   
   setupMotors();
   
-  if (!radio.begin()) {
-    Serial.println("RF24 không khởi động được!");
-    // while(1) delay(100);  // Dừng nếu lỗi
-  }
-  else {    
-    radio.setPALevel(RF24_PA_LOW);
-    radio.setDataRate(RF24_1MBPS);
-    radio.setChannel(67);
-    radio.openReadingPipe(0, address);
-    radio.startListening();
+  // if (!radio.begin()) {
+  //   Serial.println("RF24 không khởi động được!");
+  //   // while(1) delay(100);  // Dừng nếu lỗi
+  // }
+  // else {    
+  //   radio.setPALevel(RF24_PA_LOW);
+  //   radio.setDataRate(RF24_1MBPS);
+  //   radio.setChannel(67);
+  //   radio.openReadingPipe(0, address);
+  //   radio.startListening();
   }
   
   
@@ -326,9 +360,11 @@ void loop() {
   // }
 
   if (millis() - motor_counter.time >= motor_counter.interval) {
-    driveMecanum(data.power, data.theta, data.omega);
-    motor_counter.time = millis();
+    driveNormal(data.speedX*SCALE_x, data.speedY*SCALE_y);
+      motor_counter.time = millis();
   }
+
+  
   // Debug (tắt khi chạy thật)
   // static uint32_t lastDebug = 0;
   // if (millis() - lastDebug > 200) {
