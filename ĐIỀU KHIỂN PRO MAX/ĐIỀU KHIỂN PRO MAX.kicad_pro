@@ -227,6 +227,10 @@
         {
           "diameter": 0.0,
           "drill": 0.0
+        },
+        {
+          "diameter": 1.6,
+          "drill": 0.8
         }
       ],
       "zones_allow_external_fillets": false
@@ -654,7 +658,7 @@
         "uuid": "7be0df2b-6115-4b1f-891d-0ced7267c0ab"
       }
     ],
-    "used_designators": "JOYSTICK3",
+    "used_designators": "JOYSTICK3,U3,C3,C5-6,#PWR5,#PWR9-11",
     "variants": []
   },
   "sheets": [

@@ -1114,6 +1114,194 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Power_Management:RT9742BNGJ5F"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "U3"
+				(at 0 10.16 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "RT9013-33GB"
+				(at 0 7.62 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "Package_TO_SOT_SMD:TSOT-23-5"
+				(at 0 -12.7 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" "https://www.richtek.com/assets/product_file/RT9742/DS9742-10.pdf"
+				(at 0 -15.24 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "3.3V, 500mA, Low Drop Out, SOT23-5"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "Power Switch"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "TSOT?23*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "RT9742BNGJ5F_0_1"
+				(rectangle
+					(start -7.62 5.08)
+					(end 7.62 -5.08)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+			)
+			(symbol "RT9742BNGJ5F_1_1"
+				(pin power_out line
+					(at 10.16 2.54 180)
+					(length 2.54)
+					(name "VOUT"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 0 -7.62 90)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin no_connect line
+					(at 10.16 -2.54 180)
+					(length 2.54)
+					(name "NC"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -10.16 -2.54 0)
+					(length 2.54)
+					(name "EN"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at -10.16 2.54 0)
+					(length 2.54)
+					(name "VIN"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "RF:NRF24L01_Breakout"
 			(pin_names
 				(offset 1.016)
@@ -1817,6 +2005,24 @@
 		)
 	)
 	(junction
+		(at 53.34 85.09)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "082a753d-ea0e-4d5f-ada3-79ed81de5200")
+	)
+	(junction
+		(at 38.1 85.09)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "25ccaafd-a9ee-4aa5-94c1-b1e4e50bcd81")
+	)
+	(junction
+		(at 43.18 74.93)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2b9a19f6-3604-466c-8dd7-d644c9b9efea")
+	)
+	(junction
 		(at 36.83 107.95)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1841,16 +2047,22 @@
 		(uuid "9b5125fc-69e6-42d4-8968-e858c9f2f859")
 	)
 	(junction
-		(at 149.86 50.8)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "9fd2d7e5-df59-43c3-9e0b-b4b92477f831")
-	)
-	(junction
 		(at 74.93 107.95)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "aa368141-8177-41a4-ab9d-729c8ebb0fad")
+	)
+	(junction
+		(at 68.58 74.93)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "ac588f7c-abb3-4d17-91c7-f6b072873e4f")
+	)
+	(junction
+		(at 38.1 74.93)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "c24892df-5d09-4a73-a1e1-3ba603a8b2bd")
 	)
 	(junction
 		(at 229.87 68.58)
@@ -1859,10 +2071,10 @@
 		(uuid "ea3963fa-ce88-42a3-a223-01437970cc99")
 	)
 	(junction
-		(at 149.86 125.73)
+		(at 25.4 74.93)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "f39061bd-5e6f-49c9-bc52-efe6ecf149ce")
+		(uuid "f91803cb-768b-48f4-af95-4cebdd49f9c7")
 	)
 	(no_connect
 		(at 43.18 114.3)
@@ -1918,6 +2130,16 @@
 	)
 	(wire
 		(pts
+			(xy 63.5 74.93) (xy 68.58 74.93)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2e85afcc-5ce8-4fb3-9f72-1498f87ef33c")
+	)
+	(wire
+		(pts
 			(xy 243.84 87.63) (xy 243.84 100.33)
 		)
 		(stroke
@@ -1948,33 +2170,13 @@
 	)
 	(wire
 		(pts
-			(xy 135.89 50.8) (xy 149.86 50.8)
+			(xy 25.4 82.55) (xy 25.4 85.09)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "603ebb5b-4421-444f-bbe6-2e9a325779a0")
-	)
-	(wire
-		(pts
-			(xy 152.4 45.72) (xy 152.4 53.34)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "623955c9-636c-4fed-918b-03528185f0c7")
-	)
-	(wire
-		(pts
-			(xy 128.27 50.8) (xy 101.6 50.8)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "62e09153-693e-4660-961c-a7a7da2f1507")
+		(uuid "67646543-a7d5-48cf-86d6-43b4976f2216")
 	)
 	(wire
 		(pts
@@ -1988,13 +2190,13 @@
 	)
 	(wire
 		(pts
-			(xy 101.6 50.8) (xy 101.6 125.73)
+			(xy 25.4 85.09) (xy 38.1 85.09)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "77b50f87-9770-498f-a029-9f3634f37c71")
+		(uuid "736e47da-74a6-430b-82e9-a2d40e7fccdd")
 	)
 	(wire
 		(pts
@@ -2008,16 +2210,6 @@
 	)
 	(wire
 		(pts
-			(xy 101.6 125.73) (xy 149.86 125.73)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "79549141-2280-46d4-8433-fcc00aa67459")
-	)
-	(wire
-		(pts
 			(xy 36.83 127) (xy 36.83 128.27)
 		)
 		(stroke
@@ -2025,16 +2217,6 @@
 			(type default)
 		)
 		(uuid "7e317fc1-8725-4423-8ce9-8d4d7f875de1")
-	)
-	(wire
-		(pts
-			(xy 149.86 125.73) (xy 149.86 129.54)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "85bee51e-38f6-4fd5-a7c0-b98ebe9655b2")
 	)
 	(wire
 		(pts
@@ -2068,13 +2250,13 @@
 	)
 	(wire
 		(pts
-			(xy 149.86 124.46) (xy 149.86 125.73)
+			(xy 25.4 74.93) (xy 43.18 74.93)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "8f7e94d0-bc3c-4ece-8e3f-92f460ac14bc")
+		(uuid "92e4946e-b18a-4e49-924b-379c1cf67d87")
 	)
 	(wire
 		(pts
@@ -2088,6 +2270,26 @@
 	)
 	(wire
 		(pts
+			(xy 38.1 82.55) (xy 38.1 85.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "98cf7a9c-750a-45bd-bbcd-16c0c3ed5d97")
+	)
+	(wire
+		(pts
+			(xy 43.18 74.93) (xy 43.18 80.01)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9d1bd16e-641a-4520-8535-8b466b339dca")
+	)
+	(wire
+		(pts
 			(xy 229.87 99.06) (xy 229.87 100.33)
 		)
 		(stroke
@@ -2095,16 +2297,6 @@
 			(type default)
 		)
 		(uuid "a062d42f-daa9-4818-be3e-68460f5487a2")
-	)
-	(wire
-		(pts
-			(xy 149.86 50.8) (xy 149.86 53.34)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "afa9de1c-2532-4898-9438-4be091771ce1")
 	)
 	(wire
 		(pts
@@ -2118,6 +2310,26 @@
 	)
 	(wire
 		(pts
+			(xy 53.34 85.09) (xy 68.58 85.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b8c258d1-3518-4b3b-a843-75be2384d9e9")
+	)
+	(wire
+		(pts
+			(xy 38.1 85.09) (xy 53.34 85.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bab7b582-bf07-454f-8d5b-6c17edfc5f30")
+	)
+	(wire
+		(pts
 			(xy 36.83 106.68) (xy 36.83 107.95)
 		)
 		(stroke
@@ -2125,6 +2337,16 @@
 			(type default)
 		)
 		(uuid "bc3e738d-7b4c-48d3-b0ce-4aa4f3bdb658")
+	)
+	(wire
+		(pts
+			(xy 68.58 85.09) (xy 68.58 82.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c1fea9fa-5a3d-489a-a7fa-46323e69f143")
 	)
 	(wire
 		(pts
@@ -2155,16 +2377,6 @@
 			(type default)
 		)
 		(uuid "d8e24450-b4b3-4676-b50b-fa696f141da1")
-	)
-	(wire
-		(pts
-			(xy 149.86 45.72) (xy 149.86 50.8)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d9c5b874-fab7-4ab5-8d6b-21cbd31869e1")
 	)
 	(wire
 		(pts
@@ -2623,7 +2835,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Horizontal"
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical"
 			(at 55.88 129.54 0)
 			(hide yes)
 			(show_name no)
@@ -2681,83 +2893,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+5V")
-		(at 149.86 45.72 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "05bd31c2-8051-4f2c-8c6a-596f95502bb8")
-		(property "Reference" "#PWR05"
-			(at 149.86 49.53 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "+5V"
-			(at 147.32 43.18 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 149.86 45.72 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 149.86 45.72 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+5V\""
-			(at 149.86 45.72 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "0df96afe-c824-45be-9687-610ee72e8e68")
-		)
-		(instances
-			(project "ĐIỀU KHIỂN PRO MAX"
-				(path "/7be0df2b-6115-4b1f-891d-0ced7267c0ab"
-					(reference "#PWR05")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_name "Joystick_PS2_1")
 		(lib_id "Joystick PS2:Joystick_PS2")
 		(at 17.78 129.54 0)
@@ -2790,7 +2925,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Horizontal"
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical"
 			(at 17.78 129.54 0)
 			(hide yes)
 			(show_name no)
@@ -3139,6 +3274,251 @@
 		)
 	)
 	(symbol
+		(lib_id "Power_Management:RT9742BNGJ5F")
+		(at 53.34 77.47 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "50b1b1e6-f743-4ed2-8f89-146231f85e3f")
+		(property "Reference" "U3"
+			(at 53.34 67.31 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "RT9013-33GB"
+			(at 53.34 69.85 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:TSOT-23-5"
+			(at 53.34 90.17 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://file.thegioiic.com/upload/documents/1734592233_RT9013-12GB.pdf"
+			(at 53.34 92.71 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "3.3V, 500mA, Low Drop Out, SOT23-5"
+			(at 53.34 77.47 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "389aca86-46bb-4be4-a639-63f004d29fb8")
+		)
+		(pin "1"
+			(uuid "fb505d2e-d948-4cf9-8a82-98f6fff4c790")
+		)
+		(pin "3"
+			(uuid "55c1cdab-76d2-4b4d-9db2-f77015272b78")
+		)
+		(pin "5"
+			(uuid "8596e36d-d1a1-420d-ae1a-b16136942ec4")
+		)
+		(pin "4"
+			(uuid "9df728f8-dea6-454a-9db2-162e72ffc88c")
+		)
+		(instances
+			(project "ĐIỀU KHIỂN PRO MAX"
+				(path "/7be0df2b-6115-4b1f-891d-0ced7267c0ab"
+					(reference "U3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 53.34 85.09 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "571e0e6e-b848-4443-b473-9d83da404edb")
+		(property "Reference" "#PWR05"
+			(at 53.34 91.44 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 53.34 90.17 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 53.34 85.09 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 53.34 85.09 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 53.34 85.09 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "30cac5a4-28d9-4b60-a1ba-2ee3570913ce")
+		)
+		(instances
+			(project "ĐIỀU KHIỂN PRO MAX"
+				(path "/7be0df2b-6115-4b1f-891d-0ced7267c0ab"
+					(reference "#PWR05")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 149.86 124.46 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "59669538-acd0-47bb-8653-9fa9ea51fd73")
+		(property "Reference" "#PWR09"
+			(at 149.86 130.81 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 149.86 129.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 149.86 124.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 149.86 124.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 149.86 124.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "aa7874f0-ca31-4915-b893-b0a92cfb0ee9")
+		)
+		(instances
+			(project "ĐIỀU KHIỂN PRO MAX"
+				(path "/7be0df2b-6115-4b1f-891d-0ced7267c0ab"
+					(reference "#PWR09")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 229.87 104.14 0)
 		(unit 1)
@@ -3289,6 +3669,161 @@
 			(project "ĐIỀU KHIỂN PRO MAX"
 				(path "/7be0df2b-6115-4b1f-891d-0ced7267c0ab"
 					(reference "#PWR07")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 68.58 74.93 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "64b83d18-11c9-4d01-b361-e134736a7c51")
+		(property "Reference" "#PWR011"
+			(at 68.58 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+3V3"
+			(at 71.12 72.39 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 68.58 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 68.58 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3\""
+			(at 68.58 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "6a1aff8e-7a1b-4e30-a7d2-b66c230dc4b2")
+		)
+		(instances
+			(project "ĐIỀU KHIỂN PRO MAX"
+				(path "/7be0df2b-6115-4b1f-891d-0ced7267c0ab"
+					(reference "#PWR011")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+5V")
+		(at 25.4 74.93 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "719204cb-4d97-481a-92d0-028b228cf1a1")
+		(property "Reference" "#PWR010"
+			(at 25.4 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+5V"
+			(at 25.4 69.85 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 25.4 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 25.4 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+5V\""
+			(at 25.4 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "a015fd24-6d54-497c-a7ac-ed853a46407b")
+		)
+		(instances
+			(project "ĐIỀU KHIỂN PRO MAX"
+				(path "/7be0df2b-6115-4b1f-891d-0ced7267c0ab"
+					(reference "#PWR010")
 					(unit 1)
 				)
 			)
@@ -3456,86 +3991,6 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 132.08 50.8 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "8ccfec19-a9a5-4655-96c6-3bc7dae959f1")
-		(property "Reference" "C3"
-			(at 132.08 43.18 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "100uF"
-			(at 132.08 45.72 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm"
-			(at 135.89 49.8348 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 132.08 50.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Unpolarized capacitor"
-			(at 132.08 50.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "5f19478e-5f14-4132-b12a-15a77e3afd8f")
-		)
-		(pin "2"
-			(uuid "83548332-2ebf-4a4c-ac6c-0e35ca3a26a2")
-		)
-		(instances
-			(project "ĐIỀU KHIỂN PRO MAX"
-				(path "/7be0df2b-6115-4b1f-891d-0ced7267c0ab"
-					(reference "C3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C")
 		(at 27.94 118.11 180)
 		(unit 1)
 		(body_style 1)
@@ -3617,7 +4072,7 @@
 	)
 	(symbol
 		(lib_id "power:+3V3")
-		(at 152.4 45.72 0)
+		(at 152.4 53.34 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3627,7 +4082,7 @@
 		(dnp no)
 		(uuid "900597ad-eb07-4645-886b-74edc73344b9")
 		(property "Reference" "#PWR06"
-			(at 152.4 49.53 0)
+			(at 152.4 57.15 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3638,7 +4093,7 @@
 			)
 		)
 		(property "Value" "+3V3"
-			(at 154.94 43.18 0)
+			(at 154.94 50.8 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3648,7 +4103,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 152.4 45.72 0)
+			(at 152.4 53.34 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3659,7 +4114,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 152.4 45.72 0)
+			(at 152.4 53.34 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3670,7 +4125,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at 152.4 45.72 0)
+			(at 152.4 53.34 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3765,6 +4220,87 @@
 			(project "ĐIỀU KHIỂN PRO MAX"
 				(path "/7be0df2b-6115-4b1f-891d-0ced7267c0ab"
 					(reference "#PWR03")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 38.1 78.74 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "961ff4a7-1f09-40ca-9c20-a08449adb1f9")
+		(property "Reference" "C5"
+			(at 36.83 76.2 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100nF"
+			(at 35.56 81.28 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm"
+			(at 39.0652 82.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 38.1 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 38.1 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "1e087dd6-3941-464c-8ff0-668bebf7f8c3")
+		)
+		(pin "2"
+			(uuid "727976c8-0316-4331-9b08-7c00b83e7777")
+		)
+		(instances
+			(project "ĐIỀU KHIỂN PRO MAX"
+				(path "/7be0df2b-6115-4b1f-891d-0ced7267c0ab"
+					(reference "C5")
 					(unit 1)
 				)
 			)
@@ -4008,8 +4544,9 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 149.86 129.54 0)
+		(lib_id "Device:C")
+		(at 68.58 78.74 0)
+		(mirror y)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4017,31 +4554,31 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "f114859d-47b9-454e-8b93-785160314928")
-		(property "Reference" "#PWR09"
-			(at 149.86 135.89 0)
-			(hide yes)
+		(uuid "c71a8306-7b28-47b0-8799-35c486725880")
+		(property "Reference" "C6"
+			(at 69.85 76.2 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
-		(property "Value" "GND"
-			(at 149.86 134.62 0)
+		(property "Value" "100nF"
+			(at 71.12 81.28 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
-		(property "Footprint" ""
-			(at 149.86 129.54 0)
+		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm"
+			(at 67.6148 82.55 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4052,7 +4589,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 149.86 129.54 0)
+			(at 68.58 78.74 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4062,8 +4599,8 @@
 				)
 			)
 		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 149.86 129.54 0)
+		(property "Description" "Unpolarized capacitor"
+			(at 68.58 78.74 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4074,12 +4611,97 @@
 			)
 		)
 		(pin "1"
-			(uuid "ea5f1586-8939-42f5-bd6a-df39587b095d")
+			(uuid "482ee588-45c8-4eed-adce-67447939565e")
+		)
+		(pin "2"
+			(uuid "f12ab189-afe4-4c3d-bdfd-ff8607603040")
 		)
 		(instances
 			(project "ĐIỀU KHIỂN PRO MAX"
 				(path "/7be0df2b-6115-4b1f-891d-0ced7267c0ab"
-					(reference "#PWR09")
+					(reference "C6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 25.4 78.74 0)
+		(mirror x)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "cc7e624b-7950-4b99-93e1-1bfe39305514")
+		(property "Reference" "C3"
+			(at 21.59 77.4699 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "100uF"
+			(at 21.59 80.0099 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Capacitor_THT:C_Radial_D6.3mm_H11.0mm_P2.50mm"
+			(at 26.3652 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 25.4 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 25.4 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "10107f9a-a980-4f48-980a-8e87cf2e707f")
+		)
+		(pin "2"
+			(uuid "1bcb33d4-a300-4a6f-9ccc-b8a9364c8acc")
+		)
+		(instances
+			(project "ĐIỀU KHIỂN PRO MAX"
+				(path "/7be0df2b-6115-4b1f-891d-0ced7267c0ab"
+					(reference "C3")
 					(unit 1)
 				)
 			)
