@@ -3,7 +3,7 @@
 #include <stdint.h>
 
 #include <DabbleESP32.h>
-#define BLUETOOTH_NAME "ESP32_Snake"
+#define BLUETOOTH_NAME "Robotino_Mecanum"
 
 // ================== STRUCT ==================
 struct Counter_t {
@@ -19,16 +19,18 @@ struct DataPacket_t {
 };
 DataPacket_t data0 = {0, 0, 0};
 
-struct DataPacket_normal_t{
-  int16_t speedX;
-  int16_t speedY;
+struct DataPacket_Normal_t{
+  float speedTurn;
+  float speedForward;
 };
 
-DataPacket_normal_t data = {0,0};
+DataPacket_Normal_t data = {0,0};
 
 struct DabbleInput_t {
   float radius;
   float angle;
+  bool forward;
+  bool backward;
   bool left;
   bool right;
 };
@@ -42,6 +44,7 @@ DabbleInput_t dabbleInput;
 // #define HSPI_SCLK   14
 // #define HSPI_SS     15
 
+// 4 là bánh trên, 2 là bánh dưới
 // Motor Left (A)
 #define IN4L  25
 #define IN4R  14
@@ -59,9 +62,9 @@ DabbleInput_t dabbleInput;
 
 #define DEADZONE 15
 
-#define SCALE_x 1
-#define SCALE_y 1
-
+#define SCALE_LEFT 1
+#define SCALE_RIGHT 0.8
+#define MAX_POWER 255
 
 // // ================== RF24 CONFIG ==================
 // RF24 radio(CE_PIN, CSN_PIN);
@@ -153,12 +156,13 @@ void applyMotor(int speed, uint8_t pwmPin, uint8_t dirPin) {
 //     applyMotor((int)v_br, EN4R, IN4R);
 // }
 
-void driveNormal(int x, int y) {
-    int leftSpeed  = y + x;
-    int rightSpeed = y - x;
+void driveNormal(float turn_speed, float forward_speed) {
+    if (turn_speed > 0 && forward_speed == 0) turn_speed = turn_speed/abs(turn_speed) * 255; 
+    int leftSpeed  = (forward_speed + turn_speed) * SCALE_LEFT;
+    int rightSpeed = (forward_speed - turn_speed) * SCALE_RIGHT;
 
-    leftSpeed  = constrain(leftSpeed,  -255, 255);
-    rightSpeed = constrain(rightSpeed, -255, 255);
+    leftSpeed  = constrain(leftSpeed,  -1*MAX_POWER, MAX_POWER);
+    rightSpeed = constrain(rightSpeed, -1*MAX_POWER, MAX_POWER);
 
     // Xuất tín hiệu cho 2 bánh BÊN TRÁI
     applyMotor(leftSpeed,  EN2L, IN2L); // Bánh trên trái
@@ -174,6 +178,8 @@ void driveNormal(int x, int y) {
 //-------------------------------------------------------
 void getInput() {
   Dabble.processInput();
+  data.speedTurn = 0; // Reset before checking buttons
+  data.speedForward = 0;
 
   // Read all 10 buttons for game controls and settings
   // dabbleInput.radius = (float) GamePad.getRadius() / 7.0 * 255.0; // power
@@ -190,10 +196,10 @@ void getInput() {
   // data.power = dabbleInput.radius;
   // data.theta = dabbleInput.angle;
   // data.omega = dabbleInput.left * -90 + dabbleInput.right * 90;
-  if(dabbleInput.left) data.speedX = -90;
-  if(dabbleInput.right) data.speedX = 90;
-  if(dabbleInput.forward) data.speedY = 200;
-  if(dabbleInput.backward) data.speedY = -200;
+  if(dabbleInput.left) data.speedTurn = -150;
+  if(dabbleInput.right) data.speedTurn = 150;
+  if(dabbleInput.forward) data.speedForward = 255;
+  if(dabbleInput.backward) data.speedForward = -255;
 }
 
 //-------------------------------------------------------
@@ -260,48 +266,48 @@ void serialCommand() {
     // Process command
     if (valid) {
         int index = cmdMode.toInt();
-        if (cmdSelect == "power") {
-            if (index >= 0 && index <= 255) {
-                data.power = index;
-                Serial.println("Power set to " + String(data.power));
-            }
-            else
-                valid = false;
-        }
-        else if (cmdSelect == "theta") {
-            if (index >= 0 && index <= 255){
-                data.theta = (float)index / 180.0 * PI;
-                Serial.println("Theta set to " + String(data.theta));
-            }
-            else
-                valid = false;
-        }
-        else if (cmdSelect == "turn") {
-            if (index >= -255 && index <= 255) {
-                data.omega = index;
-                Serial.println("Turn set to " + String(data.omega));
-            }
-            else
-                valid = false;
-        }
-        else if (cmdSelect == "run") {
-            if (index >= 1) {
-                driveMecanum(data.power, data.theta, data.omega);
-                Serial.println("Car running at: " + String(data.omega) + " " + String(data.omega) + " " + String(data.omega));
-            }
-            else
-                valid = false;
-        }
-        else if (cmdSelect == "debug") {
-            if (index >= 1) {
-              debug = true;
-              Serial.println("Debug set to 1");
-            }
-            else {
-              debug = false;
-              Serial.println("Debug set to 0");
-            }
-        }
+        // if (cmdSelect == "power") {
+        //     if (index >= 0 && index <= 255) {
+        //         data.power = index;
+        //         Serial.println("Power set to " + String(data.power));
+        //     }
+        //     else
+        //         valid = false;
+        // }
+        // else if (cmdSelect == "theta") {
+        //     if (index >= 0 && index <= 255){
+        //         data.theta = (float)index / 180.0 * PI;
+        //         Serial.println("Theta set to " + String(data.theta));
+        //     }
+        //     else
+        //         valid = false;
+        // }
+        // else if (cmdSelect == "turn") {
+        //     if (index >= -255 && index <= 255) {
+        //         data.omega = index;
+        //         Serial.println("Turn set to " + String(data.omega));
+        //     }
+        //     else
+        //         valid = false;
+        // }
+        // else if (cmdSelect == "run") {
+        //     if (index >= 1) {
+        //         driveMecanum(data.power, data.theta, data.omega);
+        //         Serial.println("Car running at: " + String(data.omega) + " " + String(data.omega) + " " + String(data.omega));
+        //     }
+        //     else
+        //         valid = false;
+        // }
+        // else if (cmdSelect == "debug") {
+        //     if (index >= 1) {
+        //       debug = true;
+        //       Serial.println("Debug set to 1");
+        //     }
+        //     else {
+        //       debug = false;
+        //       Serial.println("Debug set to 0");
+        //     }
+        // }
     }
 
     if (!valid) {
@@ -334,7 +340,7 @@ void setup() {
   //   radio.setChannel(67);
   //   radio.openReadingPipe(0, address);
   //   radio.startListening();
-  }
+  // }
   
   
   Serial.println("Xe sẵn sàng!");
@@ -360,7 +366,7 @@ void loop() {
   // }
 
   if (millis() - motor_counter.time >= motor_counter.interval) {
-    driveNormal(data.speedX*SCALE_x, data.speedY*SCALE_y);
+    driveNormal(data.speedTurn, data.speedForward);
       motor_counter.time = millis();
   }
 
