@@ -97,12 +97,19 @@ Hệ thống hỗ trợ 2 mô hình truyền động:
 Cho phép xe tạt ngang sang trái/phải, đi chéo 45 độ hoặc vừa xoay vừa chạy mà không cần đánh lái:
 
 $$
-\begin{cases}
-V_{FL} = V_{\text{power}} \cdot \dfrac{\cos(\theta + \pi/4)}{\max\left(\lvert\sin(\theta + \pi/4)\rvert, \lvert\cos(\theta + \pi/4)\rvert\right)} + \omega \\[6pt]
-V_{FR} = V_{\text{power}} \cdot \dfrac{\sin(\theta + \pi/4)}{\max\left(\lvert\sin(\theta + \pi/4)\rvert, \lvert\cos(\theta + \pi/4)\rvert\right)} - \omega \\[6pt]
-V_{BL} = V_{\text{power}} \cdot \dfrac{\sin(\theta + \pi/4)}{\max\left(\lvert\sin(\theta + \pi/4)\rvert, \lvert\cos(\theta + \pi/4)\rvert\right)} + \omega \\[6pt]
-V_{BR} = V_{\text{power}} \cdot \dfrac{\cos(\theta + \pi/4)}{\max\left(\lvert\sin(\theta + \pi/4)\rvert, \lvert\cos(\theta + \pi/4)\rvert\right)} - \omega
-\end{cases}
+V_{FL} = V_{\text{power}} \cdot \frac{\cos(\theta + \pi/4)}{\max\left(\lvert\sin(\theta + \pi/4)\rvert, \lvert\cos(\theta + \pi/4)\rvert\right)} + \omega
+$$
+
+$$
+V_{FR} = V_{\text{power}} \cdot \frac{\sin(\theta + \pi/4)}{\max\left(\lvert\sin(\theta + \pi/4)\rvert, \lvert\cos(\theta + \pi/4)\rvert\right)} - \omega
+$$
+
+$$
+V_{BL} = V_{\text{power}} \cdot \frac{\sin(\theta + \pi/4)}{\max\left(\lvert\sin(\theta + \pi/4)\rvert, \lvert\cos(\theta + \pi/4)\rvert\right)} + \omega
+$$
+
+$$
+V_{BR} = V_{\text{power}} \cdot \frac{\cos(\theta + \pi/4)}{\max\left(\lvert\sin(\theta + \pi/4)\rvert, \lvert\cos(\theta + \pi/4)\rvert\right)} - \omega
 $$
 
 Trong đó:
@@ -116,7 +123,11 @@ Trong đó:
 Joystick thông thường trả về tọa độ trong khung hình vuông, dẫn đến việc đẩy góc chéo xe sẽ nhận giá trị lớn hơn đẩy thẳng. Trong code tay cầm:
 
 $$
-x_{\text{circular}} = x \cdot \sqrt{1 - \frac{y^2}{2}}, \qquad y_{\text{circular}} = y \cdot \sqrt{1 - \frac{x^2}{2}}
+x_{\text{circular}} = x \cdot \sqrt{1 - \frac{y^2}{2}}
+$$
+
+$$
+y_{\text{circular}} = y \cdot \sqrt{1 - \frac{x^2}{2}}
 $$
 
 Thuật toán giúp người lái có cảm giác vê cần số đồng đều và mượt mà ở mọi hướng.
