@@ -95,17 +95,30 @@ Hệ thống hỗ trợ 2 mô hình truyền động:
 
 #### A. Thuật toán bánh đa hướng Mecanum (Mecanum Kinematics)
 Cho phép xe tạt ngang sang trái/phải, đi chéo 45 độ hoặc vừa xoay vừa chạy mà không cần đánh lái:
-$$\begin{cases}
-V_{FL} = V_{\text{power}} \cdot \frac{\cos(\theta + \pi/4)}{\max(|\sin|, |\cos|)} + \omega \\
-V_{FR} = V_{\text{power}} \cdot \frac{\sin(\theta + \pi/4)}{\max(|\sin|, |\cos|)} - \omega \\
-V_{BL} = V_{\text{power}} \cdot \frac{\sin(\theta + \pi/4)}{\max(|\sin|, |\cos|)} + \omega \\
-V_{BR} = V_{\text{power}} \cdot \frac{\cos(\theta + \pi/4)}{\max(|\sin|, |\cos|)} - \omega
-\end{cases}$$
-- **Chuẩn hóa tốc độ (Normalization)**: Nếu tổng xung vượt ngưỡng cực đại (255), toàn bộ 4 bánh sẽ được giảm tỷ lệ đồng dạng để xe giữ đúng góc quỹ đạo $\theta$.
+
+$$
+\begin{cases}
+V_{FL} = V_{\text{power}} \cdot \dfrac{\cos(\theta + \pi/4)}{\max\left(\lvert\sin(\theta + \pi/4)\rvert, \lvert\cos(\theta + \pi/4)\rvert\right)} + \omega \\[6pt]
+V_{FR} = V_{\text{power}} \cdot \dfrac{\sin(\theta + \pi/4)}{\max\left(\lvert\sin(\theta + \pi/4)\rvert, \lvert\cos(\theta + \pi/4)\rvert\right)} - \omega \\[6pt]
+V_{BL} = V_{\text{power}} \cdot \dfrac{\sin(\theta + \pi/4)}{\max\left(\lvert\sin(\theta + \pi/4)\rvert, \lvert\cos(\theta + \pi/4)\rvert\right)} + \omega \\[6pt]
+V_{BR} = V_{\text{power}} \cdot \dfrac{\cos(\theta + \pi/4)}{\max\left(\lvert\sin(\theta + \pi/4)\rvert, \lvert\cos(\theta + \pi/4)\rvert\right)} - \omega
+\end{cases}
+$$
+
+Trong đó:
+- $V_{FL}, V_{FR}, V_{BL}, V_{BR}$: Vận tốc xung PWM cấp cho 4 bánh (Trước-Trái, Trước-Phải, Sau-Trái, Sau-Phải).
+- $V_{\text{power}} \in [0, 255]$: Công suất tổng (độ lớn lực đẩy từ Joystick).
+- $\theta$: Góc hướng di chuyển tính bằng Radian ($\text{atan2}(y, x)$).
+- $\omega \in [-255, 255]$: Tốc độ góc xoay thân xe tại chỗ.
+- **Chuẩn hóa tốc độ (Normalization)**: Nếu giá trị tuyệt đối lớn nhất trong 4 bánh vượt ngưỡng cực đại ($255$), toàn bộ 4 bánh sẽ được chia tỷ lệ đồng dạng theo `max_speed` để xe giữ đúng góc quỹ đạo $\theta$ mà không bị méo hướng.
 
 #### B. Thuật toán Joystick "Square to Circle Mapping"
 Joystick thông thường trả về tọa độ trong khung hình vuông, dẫn đến việc đẩy góc chéo xe sẽ nhận giá trị lớn hơn đẩy thẳng. Trong code tay cầm:
-$$x_{\text{circular}} = x \cdot \sqrt{1 - \frac{y^2}{2}}, \quad y_{\text{circular}} = y \cdot \sqrt{1 - \frac{x^2}{2}}$$
+
+$$
+x_{\text{circular}} = x \cdot \sqrt{1 - \frac{y^2}{2}}, \qquad y_{\text{circular}} = y \cdot \sqrt{1 - \frac{x^2}{2}}
+$$
+
 Thuật toán giúp người lái có cảm giác vê cần số đồng đều và mượt mà ở mọi hướng.
 
 #### C. Chế độ điều khiển vi sai (Differential Drive)
