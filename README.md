@@ -113,11 +113,11 @@ V_{BR} = V_{\text{power}} \cdot \frac{\cos(\theta + \pi/4)}{\max\left(\lvert\sin
 $$
 
 Trong đó:
-- $V_{FL}, V_{FR}, V_{BL}, V_{BR}$: Vận tốc xung PWM cấp cho 4 bánh (Trước-Trái, Trước-Phải, Sau-Trái, Sau-Phải).
-- $V_{\text{power}} \in [0, 255]$: Công suất tổng (độ lớn lực đẩy từ Joystick).
-- $\theta$: Góc hướng di chuyển tính bằng Radian ($\text{atan2}(y, x)$).
-- $\omega \in [-255, 255]$: Tốc độ góc xoay thân xe tại chỗ.
-- **Chuẩn hóa tốc độ (Normalization)**: Nếu giá trị tuyệt đối lớn nhất trong 4 bánh vượt ngưỡng cực đại ($255$), toàn bộ 4 bánh sẽ được chia tỷ lệ đồng dạng theo `max_speed` để xe giữ đúng góc quỹ đạo $\theta$ mà không bị méo hướng.
+- **`V_FL`, `V_FR`, `V_BL`, `V_BR`**: Vận tốc xung PWM cấp cho 4 bánh (Trước-Trái, Trước-Phải, Sau-Trái, Sau-Phải).
+- **`V_power`** (`0` đến `255`): Công suất tổng (độ lớn lực đẩy từ Joystick).
+- **`θ` (theta)**: Góc hướng di chuyển tính bằng Radian, được xác định bởi hàm `atan2(y, x)`.
+- **`ω` (omega)** (`-255` đến `255`): Tốc độ góc xoay thân xe tại chỗ.
+- **Chuẩn hóa tốc độ (Normalization)**: Nếu giá trị tuyệt đối lớn nhất trong 4 bánh vượt ngưỡng cực đại (`255`), toàn bộ 4 bánh sẽ được chia tỷ lệ đồng dạng theo `max_speed` để xe giữ đúng góc quỹ đạo `θ` mà không bị méo hướng.
 
 #### B. Thuật toán Joystick "Square to Circle Mapping"
 Joystick thông thường trả về tọa độ trong khung hình vuông, dẫn đến việc đẩy góc chéo xe sẽ nhận giá trị lớn hơn đẩy thẳng. Trong code tay cầm:
@@ -155,7 +155,7 @@ Khi cần lực đẩy lớn và độ bám sân cao, hệ thống kích hoạt 
 Mặc dù hệ thống vận hành tốt, dự án vẫn còn một số điểm hạn chế kỹ thuật cần khắc phục:
 
 1. **Hiệu suất sinh nhiệt của Driver L298N**:
-   - *Vấn đề*: L298N sử dụng công nghệ bóng bán dẫn BJT cũ, gây sụt áp khoảng $1.5\text{V} - 2\text{V}$ và tỏa nhiệt nhiều khi xe đẩy bóng lâu.
+   - *Vấn đề*: L298N sử dụng công nghệ bóng bán dẫn BJT cũ, gây sụt áp khoảng **1.5V – 2V** và tỏa nhiệt nhiều khi xe đẩy bóng lâu.
    - *Hướng cải tiến*: Nâng cấp sang IC MOSFET như **TB6612FNG** hoặc **DRV8833** để xe chạy mát hơn, tiết kiệm pin và bốc hơn.
 2. **Độ bám sân của bánh Mecanum**:
    - *Vấn đề*: Bánh xe Mecanum có các con lăn con (rollers) dễ bị trượt nếu mặt sân có bụi hoặc thảm thi đấu trơn trượt, làm giảm lực đẩy khi tranh chấp tay đôi.
@@ -180,9 +180,9 @@ Robotino/
 │   ├── Blocker Extender.stl       # Tấm chắn bóng dành cho Xe Thủ Môn
 │   └── Striker Extender.stl       # Càng dẫn & định vị bóng cho Xe Tiền Đạo
 │
-├── DI?U KHI?N PRO MAX/            # Thiết kế PCB mạch điều khiển cầm tay (KiCad)
-│   ├── DI?U KHI?N PRO MAX.kicad_sch  # Sơ đồ nguyên lý tay cầm (Schematic)
-│   ├── DI?U KHI?N PRO MAX.kicad_pcb  # Layout mạch in tay cầm (PCB)
+├── ĐIỀU KHIỂN PRO MAX/            # Thiết kế PCB mạch điều khiển cầm tay (KiCad)
+│   ├── ĐIỀU KHIỂN PRO MAX.kicad_sch  # Sơ đồ nguyên lý tay cầm (Schematic)
+│   ├── ĐIỀU KHIỂN PRO MAX.kicad_pcb  # Layout mạch in tay cầm (PCB)
 │   └── PCB JOYSTICK.pretty/          # Thư viện footprint Joystick
 │
 ├── L298N ROBOTINO/                # Thiết kế PCB mạch điều khiển động cơ trên xe (KiCad)
@@ -210,10 +210,10 @@ Cài đặt các thư viện sau qua **Library Manager**:
 
 ### 7.2. Nạp chương trình
 1. **Tay cầm điều khiển**:
-   - Mở file [Controller_Mecanum.ino](file:///c:/Users/TBC/.gemini/antigravity/scratch/Robotino/Source_code/Controller_Mecanum/Controller_Mecanum.ino).
+   - Mở file [Controller_Mecanum.ino](Source_code/Controller_Mecanum/Controller_Mecanum.ino).
    - Chọn board **ESP32 Dev Module** và cổng COM tương ứng, nhấn **Upload**.
 2. **Xe Robot**:
-   - Mở file [Car_Mecanum.ino](file:///c:/Users/TBC/.gemini/antigravity/scratch/Robotino/Source_code/Car_Mecanum/Car_Mecanum.ino).
+   - Mở file [Car_Mecanum.ino](Source_code/Car_Mecanum/Car_Mecanum.ino).
    - Chọn board **ESP32 Dev Module**, nạp code và kiểm tra phản hồi trên Serial Monitor (Baudrate: `115200`).
 
 ### 7.3. Điều khiển bằng Smartphone (Phương án dự phòng)
